@@ -1,37 +1,20 @@
 package com.EthanKnittel;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Game;
 
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class GameEngine extends ApplicationAdapter {
-    private KeyboardInput keyboardInput;
-    private MouseInput mouseInput;
+public class GameEngine extends Game {
 
     @Override
     public void create() {
-        keyboardInput = new KeyboardInput();
-        mouseInput = new MouseInput();
-
-        //Pour permettre à plusieurs InputProcessors de fonctionner en même temps
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(keyboardInput);
-        inputMultiplexer.addProcessor(mouseInput);
-
-        // On défini notre multiplexeur comme étant celui qui gère tous les inputs
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        //on lance le premier écran de jeu
+        setScreen(new GameScreen());
     }
 
-    @Override
-    public void render() {
-        // l'update de nos inputsProcessors
-        keyboardInput.update();
-        mouseInput.update();
-    }
+    // Le render est géré par la classe Game directement
 
     @Override
     public void dispose() {
+        super.dispose();
     }
 }
