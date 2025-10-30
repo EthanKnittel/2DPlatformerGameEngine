@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Agent {
     private final KeyboardInput keyboard;
@@ -15,15 +14,16 @@ public class Player extends Agent {
 
     private final float speed = 200f; // Vitesse de déplacement
     private Texture texture;
-    private final Vector2 velocity = new Vector2();
 
     public Player(float x, float y, int maxHealth, int damage, KeyboardInput keyboard, MouseInput mouse) {
-        super(x,y,maxHealth,damage);
+        super(x,y,64f, 64f, maxHealth, damage);
         this.keyboard = keyboard;
         this.mouse = mouse;
 
+        this.collision=true;
+
         try {
-            texture = new Texture(Gdx.files.internal("libgdx.png"));
+            texture = new Texture(Gdx.files.internal("knight.png"));
         } catch (Exception e) {
             Gdx.app.error("Player", "Error loading texture", e);
         }
@@ -47,7 +47,6 @@ public class Player extends Agent {
             velocity.x = 1;
         }
         velocity.scl(speed * deltaTime);
-        position.add(velocity);
 
         // logique à rajouter dont celles de souris
     }
@@ -55,7 +54,7 @@ public class Player extends Agent {
     @Override
     public void render(SpriteBatch batch) {
         if  (texture != null) {
-            batch.draw(texture, position.x, position.y);
+            batch.draw(texture, position.x, position.y, bounds.width,bounds.height);
         }
     }
     @Override

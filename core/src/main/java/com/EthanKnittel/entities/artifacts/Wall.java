@@ -7,9 +7,10 @@ import com.EthanKnittel.entities.Artifact;
 
 public class Wall extends Artifact{
     private Texture texture;
+    private static final float wall_size = 64f;
 
     public Wall(float x, float y){
-        super(x, y);
+        super(x, y, wall_size, wall_size);
         try {
             texture = new Texture(Gdx.files.internal("wall.png"));
         } catch (Exception e){
@@ -23,7 +24,7 @@ public class Wall extends Artifact{
     @Override
     public void render(SpriteBatch batch) {
         if (texture != null) {
-            batch.draw(texture, position.x, position.y);
+            batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
         }
     }
 
