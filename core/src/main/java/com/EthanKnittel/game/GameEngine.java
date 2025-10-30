@@ -1,4 +1,4 @@
-package com.EthanKnittel;
+package com.EthanKnittel.game;
 
 import com.badlogic.gdx.Game;
 

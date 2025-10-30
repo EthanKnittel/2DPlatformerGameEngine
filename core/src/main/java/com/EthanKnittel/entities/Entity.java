@@ -1,5 +1,6 @@
-package com.EthanKnittel;
+package com.EthanKnittel.entities;
 
+import com.EthanKnittel.Evolving;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;

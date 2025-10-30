@@ -1,24 +1,26 @@
-package com.EthanKnittel;
+package com.EthanKnittel.entities.agents;
 
+import com.EthanKnittel.entities.Agent;
+import com.EthanKnittel.inputs.KeyboardInput;
+import com.EthanKnittel.inputs.MouseInput;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends Entity {
-    private KeyboardInput keyboard;
-    private MouseInput mouse;
+public class Player extends Agent {
+    private final KeyboardInput keyboard;
+    private final MouseInput mouse;
 
     private final float speed = 200f; // Vitesse de déplacement
     private Texture texture;
-    private Vector2 velocity = new Vector2();
+    private final Vector2 velocity = new Vector2();
 
-    public Player(float x, float y, KeyboardInput keyboard, MouseInput mouse) {
-        super(x, y);
+    public Player(float x, float y, int maxHealth, int damage, KeyboardInput keyboard, MouseInput mouse) {
+        super(x,y,maxHealth,damage);
         this.keyboard = keyboard;
         this.mouse = mouse;
-        this.position = new Vector2(x, y);
 
         try {
             texture = new Texture(Gdx.files.internal("libgdx.png"));

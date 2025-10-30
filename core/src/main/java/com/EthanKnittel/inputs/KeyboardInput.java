@@ -1,4 +1,4 @@
-package com.EthanKnittel;
+package com.EthanKnittel.inputs;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;

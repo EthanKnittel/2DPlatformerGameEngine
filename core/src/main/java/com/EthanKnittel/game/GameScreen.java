@@ -1,5 +1,10 @@
-package com.EthanKnittel;
+package com.EthanKnittel.game;
 
+import com.EthanKnittel.world.Environment;
+import com.EthanKnittel.world.TestLevel;
+import com.EthanKnittel.inputs.KeyboardInput;
+import com.EthanKnittel.inputs.MouseInput;
+import com.EthanKnittel.entities.agents.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
@@ -32,11 +37,13 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         batch = new SpriteBatch();
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 600);
-        environment = new Environment();
-        player = new Player(100, 100, keyboardInput, mouseInput);
 
+        environment = new Environment();
+        player = new Player(100, 100, 100, 20, keyboardInput, mouseInput);
+        environment.setLevel(new TestLevel());
         environment.addEntity(player);
     }
 
@@ -46,8 +53,12 @@ public class GameScreen implements Screen {
         keyboardInput.update();
         mouseInput.update();
 
-        // Update de environment
+        // Update de toutes les entités dont le joueur
         environment.update(delta);
+
+        //on fixe la caméra sur le joueur (le z est à 0 car on est en 2D)
+        camera.position.set(player.GetX(), player.GetY(), 0);
+        camera.update();
 
         // on efface l'écran en mettant du noir
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -62,7 +73,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = 800f;
+        camera.viewportHeight = 800f * ((float)height / width);
+        camera.update();
     }
 
     @Override
