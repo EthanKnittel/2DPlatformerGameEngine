@@ -52,9 +52,13 @@ public class GameScreen implements Screen {
         // Update de nos inputs
         keyboardInput.update();
         mouseInput.update();
+        // on bride le delta
+        // (sinon lorsqu'on "secoue" la fenêtre notre personnage passe à travers les murs)
+        float effectiveDelta = Math.min(delta, 1/16f);
+
 
         // Update de toutes les entités dont le joueur
-        environment.update(delta);
+        environment.update(effectiveDelta);
 
         //on fixe la caméra sur le joueur (le z est à 0 car on est en 2D)
         camera.position.set(player.GetX(), player.GetY(), 0);

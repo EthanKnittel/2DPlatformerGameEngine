@@ -1,6 +1,7 @@
 package com.EthanKnittel.world;
 
 import com.EthanKnittel.Evolving;
+import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,9 +37,15 @@ public class Environment implements Disposable, Evolving {
         }
         for (int i = 0; i < entities.size; i++) {
             Entity entity = entities.get(i);
-            if (entity.GetAffectedByGravity()) {
+            if (entity.GetAffectedByGravity()) { // on applique la gravité
                 entity.GetVelocity().y += Entity.GetGravity() * deltaTime;
             }
+            if (entity instanceof  Agent) {
+                if (((Agent) entity).IsTouchingWall() && !((Agent) entity).GetIsGrounded() && entity.GetVelocity().y < 0){
+                    entity.SetVelocityY(Math.max(entity.GetVelocity().y, ((Agent) entity).GetWallSlideSpeed()));
+                }
+            }
+
             if (entity.GetVelocity().x == 0 && entity.GetVelocity().y == 0) {
                 continue; // si l'entité ne bouge pas, on la skip
             }
@@ -47,8 +54,12 @@ public class Environment implements Disposable, Evolving {
             float potentialDeltaY = entity.GetVelocity().y * deltaTime;
 
             // On dit ne pas être au sol (corrigé plus tard si besoin)
-            if (entity.GetAffectedByGravity()) {
-                entity.SetGrounded(false);
+            if (entity.GetAffectedByGravity() && entity instanceof Agent) {
+                ((Agent) entity).SetGrounded(false);
+            }
+
+            if (entity instanceof  Agent) {
+                ((Agent) entity).SetIsTouchingWall(false,false);
             }
 
             // On vérifie les collisions des entités "obstacles" (pas le joueur)
@@ -73,12 +84,18 @@ public class Environment implements Disposable, Evolving {
                     Rectangle futureBoundsX = new Rectangle(entityBounds.x + potentialDeltaX, entityBounds.y, entityBounds.width, entityBounds.height);
 
                     if (potentialDeltaX != 0 && futureBoundsX.overlaps(otherBounds)) {
+                        boolean wallIsOnLeft = false;
                         // Collision en cours sur X:
                         if (potentialDeltaX > 0) { // en allant vers la droite
                             entity.SetPosXY(otherBounds.x - entityBounds.width, entityBounds.y);
+                            wallIsOnLeft = false;
                         }
                         else if (potentialDeltaX < 0) { // en allant vers la gauche
                             entity.SetPosXY(otherBounds.x + otherBounds.width, entityBounds.y);
+                            wallIsOnLeft = true;
+                        }
+                        if (entity instanceof Agent) {
+                            ((Agent) entity).SetIsTouchingWall(true, wallIsOnLeft);
                         }
                         entity.GetVelocity().x = 0; // on stoppe le mouvement à cause de la collision
                         potentialDeltaX = 0; // on annule le déplacement pour cette frame
@@ -92,7 +109,9 @@ public class Environment implements Disposable, Evolving {
                         // Collision sur l'axe des Y !
                         if (potentialDeltaY < 0) {
                             entity.SetPosXY(entityBounds.x, otherBounds.y + otherBounds.height);
-                            entity.SetGrounded(true); // on reset le saut puisqu'on est au sol
+                            if (entity instanceof Agent){
+                                ((Agent) entity).SetGrounded(true); // on reset le saut puisqu'on est au sol
+                            }
                         }
                         else if (potentialDeltaY > 0) { // si on saute (ou se fait balancer vers le haut)
                             entity.SetPosXY(entityBounds.x, otherBounds.y - entityBounds.height);

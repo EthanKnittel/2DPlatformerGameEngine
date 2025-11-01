@@ -16,7 +16,7 @@ public class TestLevel extends Level {
         }
 
         // un plafond
-        for (int i=0; i<50; i++){
+        for (int i=0; i<5; i++){
             float wallSize = 64f;
             environment.addEntity(new Wall(i * wallSize,4 *  wallSize));
         }
@@ -28,7 +28,7 @@ public class TestLevel extends Level {
         }
 
         // un mur à droite
-        for (int i=0; i<5; i++){
+        for (int i=0; i<50; i++){
             float wallSize = 64f;
             environment.addEntity(new Wall(wallSize * 10, i * wallSize));
         }

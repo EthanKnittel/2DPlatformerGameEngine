@@ -12,7 +12,6 @@ public abstract class Entity implements Evolving,Disposable {
     private Rectangle bounds; // pour la hitbox
     private boolean collision = false;
     private boolean affectedByGravity = false;
-    private boolean isGrounded = false;
     private static float default_gravity = -980f;
 
     public Entity(float x, float y,  float width, float height) {
@@ -70,12 +69,6 @@ public abstract class Entity implements Evolving,Disposable {
     }
     public void SetAffectedByGravity(boolean affectedByGravity) {
         this.affectedByGravity = affectedByGravity;
-    }
-    public boolean GetIsGrounded() {
-        return isGrounded;
-    }
-    public void SetGrounded(boolean grounded) {
-        isGrounded = grounded;
     }
     public void Setgravity(float gravity) {
         default_gravity = gravity;
