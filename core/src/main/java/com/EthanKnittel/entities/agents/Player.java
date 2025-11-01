@@ -13,40 +13,36 @@ public class Player extends Agent {
     private final MouseInput mouse;
 
     private final float speed = 200f; // Vitesse de déplacement
+    private final float jumpSpeed = 400f;
     private Texture texture;
 
     public Player(float x, float y, int maxHealth, int damage, KeyboardInput keyboard, MouseInput mouse) {
         super(x,y,64f, 64f, maxHealth, damage);
         this.keyboard = keyboard;
         this.mouse = mouse;
+        this.SetCollision(false); // ce n'est pas un "obstacle"
 
-        this.collision=true;
-
-        try {
+        try { // on essaie de charger la texture
             texture = new Texture(Gdx.files.internal("knight.png"));
-        } catch (Exception e) {
+        } catch (Exception e) { // si ça marche pas:
             Gdx.app.error("Player", "Error loading texture", e);
         }
     }
 
     @Override
     public void update(float deltaTime) {
-        velocity.set(0, 0);
-
+        SetVelocityX(0);
         // Déplacements
-        if (keyboard.isKeyDown(Input.Keys.W)) {
-            velocity.y = 1;
-        }
-        if (keyboard.isKeyDown(Input.Keys.S)) {
-            velocity.y = -1;
-        }
         if (keyboard.isKeyDown(Input.Keys.A)) {
-            velocity.x = -1;
+            SetVelocityX(-speed);
         }
         if (keyboard.isKeyDown(Input.Keys.D)) {
-            velocity.x = 1;
+            SetVelocityX(speed);
         }
-        velocity.scl(speed * deltaTime);
+        if (keyboard.isKeyDown(Input.Keys.SPACE) && GetIsGrounded()) {
+            SetVelocityY(jumpSpeed);
+        }
+
 
         // logique à rajouter dont celles de souris
     }
@@ -54,7 +50,7 @@ public class Player extends Agent {
     @Override
     public void render(SpriteBatch batch) {
         if  (texture != null) {
-            batch.draw(texture, position.x, position.y, bounds.width,bounds.height);
+            batch.draw(texture, GetX(), GetY(), GetBounds().width, GetBounds().height);
         }
     }
     @Override

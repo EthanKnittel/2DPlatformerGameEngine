@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, 800, 600);
 
         environment = new Environment();
-        player = new Player(100, 100, 100, 20, keyboardInput, mouseInput);
+        player = new Player(200, 100, 100, 20, keyboardInput, mouseInput);
         environment.setLevel(new TestLevel());
         environment.addEntity(player);
     }
