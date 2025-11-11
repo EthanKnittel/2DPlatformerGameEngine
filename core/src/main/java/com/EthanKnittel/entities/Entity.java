@@ -1,6 +1,7 @@
 package com.EthanKnittel.entities;
 
 import com.EthanKnittel.Evolving;
+import com.EthanKnittel.game.GameScreen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +13,7 @@ public abstract class Entity implements Evolving,Disposable {
     private Rectangle bounds; // pour la hitbox
     private boolean collision = false;
     private boolean affectedByGravity = false;
-    private static float default_gravity = -980f;
+    private static float default_gravity = -980f/ GameScreen.getPixelsPerBlocks();
 
     public Entity(float x, float y,  float width, float height) {
         // on initialise le vecteur de LibGDX

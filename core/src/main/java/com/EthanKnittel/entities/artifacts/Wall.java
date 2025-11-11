@@ -7,14 +7,15 @@ import com.EthanKnittel.entities.Artifact;
 
 public class Wall extends Artifact{
     private Texture texture;
-    private static final float wall_size = 64f;
 
-    public Wall(float x, float y){
-        super(x, y, wall_size, wall_size);
-        try {
-            texture = new Texture(Gdx.files.internal("wall.png"));
-        } catch (Exception e){
-            Gdx.app.error("Wall", "Error loading texture");
+    public Wall(float x, float y, float width, float height, boolean loadTexture) {
+        super(x, y, width, height);
+        if(loadTexture) {
+            try {
+                texture = new Texture(Gdx.files.internal("wall.png"));
+            } catch (Exception e) {
+                Gdx.app.error("Wall", "Error loading texture");
+            }
         }
     }
     @Override

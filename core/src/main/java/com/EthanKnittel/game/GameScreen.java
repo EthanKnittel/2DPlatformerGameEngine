@@ -5,6 +5,7 @@ import com.EthanKnittel.world.TestLevel;
 import com.EthanKnittel.inputs.KeyboardInput;
 import com.EthanKnittel.inputs.MouseInput;
 import com.EthanKnittel.entities.agents.Player;
+import com.EthanKnittel.world.TiledLevel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Player player;
     private Environment environment;
+    private static final float PixelsPerBlocks = 16f;
 
     @Override
     public void show() {
@@ -39,12 +41,23 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
+        camera.setToOrtho(false, 800/PixelsPerBlocks, 600/PixelsPerBlocks);
 
         environment = new Environment();
-        player = new Player(200, 100, 100, 20, keyboardInput, mouseInput);
-        environment.setLevel(new TestLevel());
+
+        float playerWidth= 32f/PixelsPerBlocks;
+        float playerHeight = 32f/PixelsPerBlocks;
+
+        player = new Player(10f,2f,playerWidth,playerHeight,100, 20, keyboardInput, mouseInput);
+
+        try {
+            environment.setLevel(new TiledLevel("TiledLevels/4.tmx", "Edge"));
+        } catch (Exception e) {
+            Gdx.app.error("GameScreen", "Erreur de chargement du TiledLevel, chargement du testLevel");
+            environment.setLevel(new TestLevel());
+        }
         environment.addEntity(player);
+
     }
 
     @Override
@@ -70,15 +83,13 @@ public class GameScreen implements Screen {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        environment.render(batch);
-        batch.end();
+        environment.render(batch, camera);
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = 800f;
-        camera.viewportHeight = 800f * ((float)height / width);
+        camera.viewportWidth = (800f/PixelsPerBlocks);
+        camera.viewportHeight = (800f * ((float)height / width))/PixelsPerBlocks;
         camera.update();
     }
 
@@ -100,5 +111,9 @@ public class GameScreen implements Screen {
     public void dispose() {
         environment.dispose();
         batch.dispose();
+    }
+
+    public static float getPixelsPerBlocks(){
+        return PixelsPerBlocks;
     }
 }

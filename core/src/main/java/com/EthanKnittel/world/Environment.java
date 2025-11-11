@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Environment implements Disposable, Evolving {
 
@@ -128,10 +129,15 @@ public class Environment implements Disposable, Evolving {
         }
     }
 
-    public void  render(SpriteBatch batch) {
-        for(Entity entity : entities){
+    public void  render(SpriteBatch batch, OrthographicCamera camera) {
+        if (currentlevel != null && currentlevel instanceof TiledLevel) {
+            ((TiledLevel) currentlevel).render(camera);
+        }
+        batch.begin();
+        for (Entity entity : entities) {
             entity.render(batch);
         }
+        batch.end();
     }
 
     @Override

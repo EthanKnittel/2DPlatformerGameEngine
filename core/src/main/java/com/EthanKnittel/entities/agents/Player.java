@@ -1,6 +1,7 @@
 package com.EthanKnittel.entities.agents;
 
 import com.EthanKnittel.entities.Agent;
+import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.inputs.KeyboardInput;
 import com.EthanKnittel.inputs.MouseInput;
 import com.EthanKnittel.graphics.AnimationManager;
@@ -17,21 +18,20 @@ public class Player extends Agent {
     private TextureAtlas atlas;
     private Animation<TextureRegion> idleAnim, walkAnim, runAnim, jumpAnim, wallSlideAnim, hitAnim, fallAnim;
 
-    private final float walkSpeed = 200f; // Vitesse de déplacement
-    private final float runSpeed = 300f;
-    private final float jumpSpeed = 400f;
-    private final float wallJumpYSpeed = 500f;
-    private final float wallJumpXSpeed = 300f;
+    private final float walkSpeed = 200f/ GameScreen.getPixelsPerBlocks(); // Vitesse de déplacement
+    private final float runSpeed = 300f/ GameScreen.getPixelsPerBlocks();
+    private final float jumpSpeed = 400f/ GameScreen.getPixelsPerBlocks();
+    private final float wallJumpYSpeed = 500f/ GameScreen.getPixelsPerBlocks();
+    private final float wallJumpXSpeed = 300f/ GameScreen.getPixelsPerBlocks();
     private float wallJumpTimer = 0f;
     private final float wallJumpControl = 0.1f; // temps avant de pouvoir recontroler notre personnage
     private transient AnimationManager animationManager;
-    private boolean isFacingLeft = false;
 
     private transient Texture spriteSheet;
 
 
-    public Player(float x, float y, int maxHealth, int damage, KeyboardInput keyboard, MouseInput mouse) {
-        super(x,y,64f, 64f, maxHealth, damage);
+    public Player(float x, float y,float width, float height, int maxHealth, int damage, KeyboardInput keyboard, MouseInput mouse) {
+        super(x,y,width, height, maxHealth, damage);
         this.keyboard = keyboard;
         this.mouse = mouse;
         this.SetCollision(false); // ce n'est pas un "obstacle"
@@ -114,7 +114,7 @@ public class Player extends Agent {
             if (getGrounded()) {
                 SetVelocityY(jumpSpeed);
                 setGrounded(false);
-            } else if (IsTouchingWall()){
+            } else if (IsTouchingWall() && GetVelocity().y <= 0){
                 SetVelocityY(wallJumpYSpeed);
                 if (IsWallOnLeft()){
                     SetVelocityX(wallJumpXSpeed);

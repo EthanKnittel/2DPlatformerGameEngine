@@ -1,5 +1,6 @@
 package com.EthanKnittel.entities;
 
+import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.graphics.AnimationManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,7 +14,7 @@ public abstract class Agent extends Entity {
     private boolean isGrounded = false;
     private boolean isTouchingWall = false;
     private boolean isWallOnLeft = false;
-    private static float wallSlideSpeed = -200f;
+    private static float wallSlideSpeed = -200f/ GameScreen.getPixelsPerBlocks();
 
     protected AnimationManager animationManager;
     protected boolean facingLeft = false;
