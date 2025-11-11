@@ -41,7 +41,7 @@ public class Environment implements Disposable, Evolving {
                 entity.GetVelocity().y += Entity.GetGravity() * deltaTime;
             }
             if (entity instanceof  Agent) {
-                if (((Agent) entity).IsTouchingWall() && !((Agent) entity).GetIsGrounded() && entity.GetVelocity().y < 0){
+                if (((Agent) entity).IsTouchingWall() && !((Agent) entity).getGrounded() && entity.GetVelocity().y < 0){
                     entity.SetVelocityY(Math.max(entity.GetVelocity().y, ((Agent) entity).GetWallSlideSpeed()));
                 }
             }
@@ -55,7 +55,7 @@ public class Environment implements Disposable, Evolving {
 
             // On dit ne pas être au sol (corrigé plus tard si besoin)
             if (entity.GetAffectedByGravity() && entity instanceof Agent) {
-                ((Agent) entity).SetGrounded(false);
+                ((Agent) entity).setGrounded(false);
             }
 
             if (entity instanceof  Agent) {
@@ -110,7 +110,7 @@ public class Environment implements Disposable, Evolving {
                         if (potentialDeltaY < 0) {
                             entity.SetPosXY(entityBounds.x, otherBounds.y + otherBounds.height);
                             if (entity instanceof Agent){
-                                ((Agent) entity).SetGrounded(true); // on reset le saut puisqu'on est au sol
+                                ((Agent) entity).setGrounded(true); // on reset le saut puisqu'on est au sol
                             }
                         }
                         else if (potentialDeltaY > 0) { // si on saute (ou se fait balancer vers le haut)

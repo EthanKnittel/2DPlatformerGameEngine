@@ -17,7 +17,7 @@ public class AnimationManager {
     }
 
     public TextureRegion getFrame() {
-        return animation.getKeyFrame(stateTime, true);
+        return animation.getKeyFrame(stateTime, animation.getPlayMode() ==  Animation.PlayMode.LOOP);
     }
 
     // pour changer d'animation (genre courir → marcher)
@@ -26,5 +26,14 @@ public class AnimationManager {
             this.animation = Newanimation;
             stateTime = 0f; // on réinitialise le temps de la nouvelle animation
         }
+    }
+
+    public void SetStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public float GetAnimationDuration() {
+        return animation.getAnimationDuration();
+
     }
 }

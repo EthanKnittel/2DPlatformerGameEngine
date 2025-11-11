@@ -1,5 +1,9 @@
 package com.EthanKnittel.entities;
 
+import com.EthanKnittel.graphics.AnimationManager;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Agent extends Entity {
 
@@ -11,6 +15,9 @@ public abstract class Agent extends Entity {
     private boolean isWallOnLeft = false;
     private static float wallSlideSpeed = -200f;
 
+    protected AnimationManager animationManager;
+    protected boolean facingLeft = false;
+
 
 
     public Agent(float x, float y, float width, float height, int maxHealth, int damage) {
@@ -20,6 +27,15 @@ public abstract class Agent extends Entity {
         this.damage = damage;
         this.SetAffectedByGravity(true);
     }
+
+    protected void setAnimation(Animation<TextureRegion> animation){
+        if (animationManager == null) {
+            animationManager = new AnimationManager(animation);
+        } else {
+            animationManager.SetAnimation(animation);
+        }
+    }
+
     public int getCurrenthealth() {
         return this.currenthealth;
     }
@@ -32,10 +48,10 @@ public abstract class Agent extends Entity {
     public boolean isAlive() {
         return this.currenthealth > 0;
     }
-    public void SetGrounded(boolean grounded) {
+    public void setGrounded(boolean grounded) {
         isGrounded = grounded;
     }
-    public boolean GetIsGrounded() {
+    public boolean getGrounded() {
         return isGrounded;
     }
     public boolean IsTouchingWall() {
@@ -50,6 +66,7 @@ public abstract class Agent extends Entity {
     public void SetWallSlideSpeed(float speed) {
         wallSlideSpeed = speed;
     }
+
     public void SetIsTouchingWall(boolean touching, boolean isWallOnLeft) {
         this.isTouchingWall = touching;
         if (touching){ // on met à jour le côté touché
@@ -57,5 +74,21 @@ public abstract class Agent extends Entity {
         }
     }
 
+    @Override
+    public void update(float deltaTime) {
+        if (animationManager != null) {
+            animationManager.update(deltaTime);
+        }
+    }
 
+    @Override
+    public void render(SpriteBatch batch) {
+        if (animationManager != null) {
+            TextureRegion currentframe = animationManager.getFrame();
+            if (currentframe.isFlipX() != facingLeft) {
+                currentframe.flip(true, false); // on retourne le x mais pas le y
+            }
+            batch.draw(currentframe, GetX(), GetY(), GetBounds().width, GetBounds().height);
+        }
+    }
 }
