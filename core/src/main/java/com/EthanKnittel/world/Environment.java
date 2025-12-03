@@ -21,9 +21,11 @@ public class Environment implements Disposable, Evolving {
     public void setLevel(Level level) {
         if (this.currentlevel != null) {
             this.currentlevel.dispose();
+            entities.clear(); // on retire les entités du niveau précédent
         }
         this.currentlevel = level;
-        this.currentlevel.load(this);
+        Array<Entity> levelEntities = this.currentlevel.load();
+        this.entities.addAll(levelEntities);
     }
 
     public void addEntity(Entity entity) {
@@ -38,33 +40,31 @@ public class Environment implements Disposable, Evolving {
         }
         for (int i = 0; i < entities.size; i++) {
             Entity entity = entities.get(i);
-            if (entity.GetAffectedByGravity()) { // on applique la gravité
-                entity.GetVelocity().y += Entity.GetGravity() * deltaTime;
+            if (entity.getAffectedByGravity()) { // on applique la gravité
+                entity.getVelocity().y += Entity.getGravity() * deltaTime;
             }
-            if (entity instanceof  Agent) {
-                if (((Agent) entity).IsTouchingWall() && !((Agent) entity).getGrounded() && entity.GetVelocity().y < 0){
-                    entity.SetVelocityY(Math.max(entity.GetVelocity().y, ((Agent) entity).GetWallSlideSpeed()));
+            if (entity.getIsAgent()) {
+                Agent agent = (Agent) entity;
+                if (agent.getTouchingWall() && !agent.getGrounded() && agent.getVelocity().y < 0) {
+                    agent.setVelocityY(Math.max(agent.getVelocity().y, agent.getWallSlideSpeed()));
                 }
+                // On dit ne pas être au sol (corrigé plus tard si besoin)
+                if (agent.getAffectedByGravity()) {
+                    agent.setGrounded(false);
+                }
+                agent.setIsTouchingWall(false, false);
             }
 
-            if (entity.GetVelocity().x == 0 && entity.GetVelocity().y == 0) {
+            if (entity.getVelocity().x == 0 && entity.getVelocity().y == 0) {
                 continue; // si l'entité ne bouge pas, on la skip
             }
 
-            float potentialDeltaX = entity.GetVelocity().x * deltaTime;
-            float potentialDeltaY = entity.GetVelocity().y * deltaTime;
+            float potentialDeltaX = entity.getVelocity().x * deltaTime;
+            float potentialDeltaY = entity.getVelocity().y * deltaTime;
 
-            // On dit ne pas être au sol (corrigé plus tard si besoin)
-            if (entity.GetAffectedByGravity() && entity instanceof Agent) {
-                ((Agent) entity).setGrounded(false);
-            }
-
-            if (entity instanceof  Agent) {
-                ((Agent) entity).SetIsTouchingWall(false,false);
-            }
 
             // On vérifie les collisions des entités "obstacles" (pas le joueur)
-            if (!entity.GetCollision()) {
+            if (!entity.getCollision()) {
                 // on vérifie ses collisions avec toutes les autres entités
                 for (int j = 0; j < entities.size; j++) {
                     // sauf elle-même
@@ -75,12 +75,12 @@ public class Environment implements Disposable, Evolving {
                     Entity other = entities.get(j);
 
                     // on ne vérifie que contre les entités "solides"
-                    if (!other.GetCollision()) {
+                    if (!other.getCollision()) {
                         continue;
                     }
 
-                    Rectangle entityBounds = entity.GetBounds();
-                    Rectangle otherBounds = other.GetBounds();
+                    Rectangle entityBounds = entity.getbounds();
+                    Rectangle otherBounds = other.getbounds();
 
                     Rectangle futureBoundsX = new Rectangle(entityBounds.x + potentialDeltaX, entityBounds.y, entityBounds.width, entityBounds.height);
 
@@ -88,56 +88,53 @@ public class Environment implements Disposable, Evolving {
                         boolean wallIsOnLeft = false;
                         // Collision en cours sur X:
                         if (potentialDeltaX > 0) { // en allant vers la droite
-                            entity.SetPosXY(otherBounds.x - entityBounds.width, entityBounds.y);
+                            entity.setPosXY(otherBounds.x - entityBounds.width, entityBounds.y);
                             wallIsOnLeft = false;
-                        }
-                        else if (potentialDeltaX < 0) { // en allant vers la gauche
-                            entity.SetPosXY(otherBounds.x + otherBounds.width, entityBounds.y);
+                        } else if (potentialDeltaX < 0) { // en allant vers la gauche
+                            entity.setPosXY(otherBounds.x + otherBounds.width, entityBounds.y);
                             wallIsOnLeft = true;
                         }
                         if (entity instanceof Agent) {
-                            ((Agent) entity).SetIsTouchingWall(true, wallIsOnLeft);
+                            ((Agent) entity).setIsTouchingWall(true, wallIsOnLeft);
                         }
-                        entity.GetVelocity().x = 0; // on stoppe le mouvement à cause de la collision
+                        entity.getVelocity().x = 0; // on stoppe le mouvement à cause de la collision
                         potentialDeltaX = 0; // on annule le déplacement pour cette frame
                     }
                     // on met à jour la hitbox sur l'axe des X avant de tester celle sur Y
-                    entityBounds.x = entity.GetX();
+                    entityBounds.x = entity.getX();
 
                     Rectangle futureBoundsY = new Rectangle(entityBounds.x, entityBounds.y + potentialDeltaY, entityBounds.width, entityBounds.height);
 
                     if (potentialDeltaY != 0 && futureBoundsY.overlaps(otherBounds)) {
                         // Collision sur l'axe des Y !
                         if (potentialDeltaY < 0) {
-                            entity.SetPosXY(entityBounds.x, otherBounds.y + otherBounds.height);
-                            if (entity instanceof Agent){
+                            entity.setPosXY(entityBounds.x, otherBounds.y + otherBounds.height);
+                            if (entity instanceof Agent) {
                                 ((Agent) entity).setGrounded(true); // on reset le saut puisqu'on est au sol
                             }
+                        } else if (potentialDeltaY > 0) { // si on saute (ou se fait balancer vers le haut)
+                            entity.setPosXY(entityBounds.x, otherBounds.y - entityBounds.height);
                         }
-                        else if (potentialDeltaY > 0) { // si on saute (ou se fait balancer vers le haut)
-                            entity.SetPosXY(entityBounds.x, otherBounds.y - entityBounds.height);
-                        }
-                        entity.GetVelocity().y = 0; // on arrete le mouvement vertical
+                        entity.getVelocity().y = 0; // on arrete le mouvement vertical
                         potentialDeltaY = 0; // on annule le déplacement pour cette frame
                     }
                 }
             }
 
             if (potentialDeltaX != 0 || potentialDeltaY != 0) { // on applique le mouvement
-                entity.SetPosXY(entity.GetX() + potentialDeltaX, entity.GetY() + potentialDeltaY);
+                entity.setPosXY(entity.getX() + potentialDeltaX, entity.getY() + potentialDeltaY);
             }
         }
     }
 
-    public void  render(SpriteBatch batch, OrthographicCamera camera) {
-        if (currentlevel != null && currentlevel instanceof TiledLevel) {
-            ((TiledLevel) currentlevel).render(camera);
-        }
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        currentlevel.renderBackground(camera);
         batch.begin();
         for (Entity entity : entities) {
             entity.render(batch);
         }
         batch.end();
+        currentlevel.renderAbove(camera);
     }
 
     @Override
@@ -145,7 +142,7 @@ public class Environment implements Disposable, Evolving {
         if (currentlevel != null) {
             currentlevel.dispose();
         }
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             entity.dispose();
         }
     }

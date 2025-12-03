@@ -25,7 +25,7 @@ public class Wall extends Artifact{
     @Override
     public void render(SpriteBatch batch) {
         if (texture != null) {
-            batch.draw(texture, GetX(), GetY(), GetBounds().width, GetBounds().height);
+            batch.draw(texture, getX(), getY(), getbounds().width, getbounds().height);
         }
     }
 

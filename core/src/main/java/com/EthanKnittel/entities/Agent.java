@@ -15,9 +15,11 @@ public abstract class Agent extends Entity {
     private boolean isTouchingWall = false;
     private boolean isWallOnLeft = false;
     private static float wallSlideSpeed = -200f/ GameScreen.getPixelsPerBlocks();
+    private float moveSpeed = 150f/ GameScreen.getPixelsPerBlocks();
+    private float jumpSpeed = 400f/ GameScreen.getPixelsPerBlocks();
 
-    protected AnimationManager animationManager;
-    protected boolean facingLeft = false;
+    private AnimationManager animationManager;
+    private boolean facingLeft = false;
 
 
 
@@ -26,15 +28,37 @@ public abstract class Agent extends Entity {
         this.maxHealth = maxHealth;
         this.currenthealth = maxHealth;
         this.damage = damage;
-        this.SetAffectedByGravity(true);
+        this.setAffectedByGravity(true);
+        this.setIsAgent(true);
     }
 
-    protected void setAnimation(Animation<TextureRegion> animation){
+    public void setAnimation(Animation<TextureRegion> animation){
         if (animationManager == null) {
             animationManager = new AnimationManager(animation);
         } else {
-            animationManager.SetAnimation(animation);
+            animationManager.setAnimation(animation);
         }
+    }
+
+    public void setMoveSpeed(float moveSpeed) {
+        this.moveSpeed = moveSpeed;
+    }
+    public void setJumpSpeed(float jumpSpeed) {
+        this.jumpSpeed = jumpSpeed;
+    }
+    public float getMoveSpeed() {
+        return moveSpeed;
+    }
+    public float getJumpSpeed() {
+        return jumpSpeed;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        this.facingLeft = facingLeft;
+    }
+
+    public boolean getFacingLeft() {
+        return facingLeft;
     }
 
     public int getCurrenthealth() {
@@ -55,20 +79,20 @@ public abstract class Agent extends Entity {
     public boolean getGrounded() {
         return isGrounded;
     }
-    public boolean IsTouchingWall() {
+    public boolean getTouchingWall() {
         return isTouchingWall;
     }
-    public boolean IsWallOnLeft() {
+    public boolean getWallOnLeft() {
         return isWallOnLeft;
     }
-    public float GetWallSlideSpeed() {
+    public float getWallSlideSpeed() {
         return wallSlideSpeed;
     }
-    public void SetWallSlideSpeed(float speed) {
+    public void setWallSlideSpeed(float speed) {
         wallSlideSpeed = speed;
     }
 
-    public void SetIsTouchingWall(boolean touching, boolean isWallOnLeft) {
+    public void setIsTouchingWall(boolean touching, boolean isWallOnLeft) {
         this.isTouchingWall = touching;
         if (touching){ // on met à jour le côté touché
             this.isWallOnLeft = isWallOnLeft;
@@ -89,7 +113,7 @@ public abstract class Agent extends Entity {
             if (currentframe.isFlipX() != facingLeft) {
                 currentframe.flip(true, false); // on retourne le x mais pas le y
             }
-            batch.draw(currentframe, GetX(), GetY(), GetBounds().width, GetBounds().height);
+            batch.draw(currentframe, getX(), getY(), getbounds().width, getbounds().height);
         }
     }
 }

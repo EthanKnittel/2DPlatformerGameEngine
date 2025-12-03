@@ -1,5 +1,6 @@
 package com.EthanKnittel.game;
 
+import com.EthanKnittel.entities.agents.foes.Cactus;
 import com.EthanKnittel.world.Environment;
 import com.EthanKnittel.world.TestLevel;
 import com.EthanKnittel.inputs.KeyboardInput;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameScreen implements Screen {
 
@@ -51,7 +53,18 @@ public class GameScreen implements Screen {
         player = new Player(10f,2f,playerWidth,playerHeight,100, 20, keyboardInput, mouseInput);
 
         try {
-            environment.setLevel(new TiledLevel("TiledLevels/4.tmx", "Edge"));
+            TiledLevel level = new TiledLevel("TiledLevels/4.tmx");
+            environment.setLevel(level);
+            if (level.getPlayerSpawnPoint() != null){
+                player.setPosXY(level.getPlayerSpawnPoint().x, level.getPlayerSpawnPoint().y);
+            }
+            if (level.getCactusSpawnPoints() != null){
+                for (Vector2 spawn : level.getCactusSpawnPoints()){
+                    Cactus cactus = new Cactus(spawn.x, spawn.y, player);
+                    environment.addEntity(cactus);
+                }
+            }
+
         } catch (Exception e) {
             Gdx.app.error("GameScreen", "Erreur de chargement du TiledLevel, chargement du testLevel");
             environment.setLevel(new TestLevel());
@@ -74,7 +87,7 @@ public class GameScreen implements Screen {
         environment.update(effectiveDelta);
 
         //on fixe la caméra sur le joueur (le z est à 0 car on est en 2D)
-        camera.position.set(player.GetX(), player.GetY(), 0);
+        camera.position.set(player.getX(), player.getY(), 0);
         camera.update();
 
         // on efface l'écran en mettant du noir

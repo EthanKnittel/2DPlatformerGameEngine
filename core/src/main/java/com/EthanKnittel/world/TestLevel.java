@@ -1,7 +1,9 @@
 package com.EthanKnittel.world;
 
+import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.Array;
 
 public class TestLevel extends Level {
     public TestLevel() {
@@ -9,30 +11,30 @@ public class TestLevel extends Level {
     }
 
     @Override
-    public void load(Environment environment) {
+    public Array<Entity> load() {
+        Array<Entity> generatedEntities = new Array<>();
         // un sol
-        for (int i=0; i<100; i++){
-            float wallSize = 64f;
-            environment.addEntity(new Wall(i * wallSize,0, 64,64, true));
+        float wallSize = 4f;
+        for (int i=0; i<10; i++){
+            generatedEntities.add(new Wall(i * wallSize,0, wallSize,wallSize, true));
         }
 
         // un plafond
         for (int i=0; i<5; i++){
-            float wallSize = 64f;
-            environment.addEntity(new Wall(i * wallSize,4 *  wallSize,64,64, true));
+            generatedEntities.add(new Wall(i * wallSize,4 *  wallSize,wallSize,wallSize, true));
         }
 
         // un mur à gauche
         for (int i=0; i<5; i++){
-            float wallSize = 64f;
-            environment.addEntity(new Wall(0, i * wallSize,64,64, true));
+            generatedEntities.add(new Wall(0, i * wallSize,wallSize,wallSize, true));
         }
 
         // un mur à droite
         for (int i=0; i<50; i++){
-            float wallSize = 64f;
-            environment.addEntity(new Wall(wallSize * 10, i * wallSize,64,64, true));
+            generatedEntities.add(new Wall(wallSize * 10, i * wallSize,wallSize,wallSize, true));
         }
+
+        return generatedEntities;
 
     }
 
@@ -41,7 +43,11 @@ public class TestLevel extends Level {
     }
 
     @Override
-    public void render(OrthographicCamera camera) {
+    public void renderBackground(OrthographicCamera camera) {
+    }
+
+    @Override
+    public void renderAbove(OrthographicCamera camera) {
     }
 
 

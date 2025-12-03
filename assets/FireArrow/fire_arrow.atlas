@@ -1,0 +1,27 @@
+fire_arrow.png
+size:2048,1024
+repeat:none
+Fire Arrow_Frame
+index:4
+bounds:2,646,600,320
+Fire Arrow_Frame
+index:1
+bounds:2,324,600,320
+Fire Arrow_Frame
+index:6
+bounds:604,646,600,320
+Fire Arrow_Frame
+index:3
+bounds:2,2,600,320
+Fire Arrow_Frame
+index:8
+bounds:604,324,600,320
+Fire Arrow_Frame
+index:5
+bounds:1206,646,600,320
+Fire Arrow_Frame
+index:2
+bounds:604,2,600,320
+Fire Arrow_Frame
+index:7
+bounds:1206,324,600,320

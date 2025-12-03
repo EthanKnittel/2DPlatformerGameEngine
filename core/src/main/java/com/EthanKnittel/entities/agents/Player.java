@@ -34,7 +34,7 @@ public class Player extends Agent {
         super(x,y,width, height, maxHealth, damage);
         this.keyboard = keyboard;
         this.mouse = mouse;
-        this.SetCollision(false); // ce n'est pas un "obstacle"
+        this.setCollision(false); // ce n'est pas un "obstacle"
         loadAnimation();
     }
 
@@ -62,15 +62,15 @@ public class Player extends Agent {
         super.update(deltaTime); // update des animations provenant de Agent
         boolean running = (keyboard.isKeyDown(Input.Keys.SHIFT_LEFT));
 
-        if (IsTouchingWall() && !getGrounded()){
+        if (getTouchingWall() && !getGrounded()){
             setAnimation(wallSlideAnim);
         } else if (!getGrounded()) {
-            if (GetVelocity().y<0){
+            if (getVelocity().y<0){
                 setAnimation(fallAnim);
             } else {
                 setAnimation(jumpAnim);
             }
-        } else if (GetVelocity().x != 0){
+        } else if (getVelocity().x != 0){
             if (running){
                 setAnimation(runAnim);
             }
@@ -81,10 +81,10 @@ public class Player extends Agent {
             setAnimation(idleAnim);
         }
 
-        if (GetVelocity().x < 0 ){
-            facingLeft = true;
-        } else if (GetVelocity().x > 0) {
-            facingLeft = false;
+        if (getVelocity().x < 0 ){
+            setFacingLeft(true);
+        } else if (getVelocity().x > 0) {
+            setFacingLeft(false);
 
         }
 
@@ -92,7 +92,7 @@ public class Player extends Agent {
             wallJumpTimer -= deltaTime;
         }
         if (getGrounded()) {
-            SetVelocityX(0);
+            setVelocityX(0);
         }
         // Déplacements
         if (wallJumpTimer <= 0) {
@@ -104,22 +104,22 @@ public class Player extends Agent {
             }
 
             if (keyboard.isKeyDown(Input.Keys.A)) {
-                SetVelocityX(-currentSpeed);
+                setVelocityX(-currentSpeed);
             }
             if (keyboard.isKeyDown(Input.Keys.D)) {
-                SetVelocityX(currentSpeed);
+                setVelocityX(currentSpeed);
             }
         }
         if (keyboard.isKeyDown(Input.Keys.SPACE)) {
             if (getGrounded()) {
-                SetVelocityY(jumpSpeed);
+                setVelocityY(jumpSpeed);
                 setGrounded(false);
-            } else if (IsTouchingWall() && GetVelocity().y <= 0){
-                SetVelocityY(wallJumpYSpeed);
-                if (IsWallOnLeft()){
-                    SetVelocityX(wallJumpXSpeed);
+            } else if (getTouchingWall() && getVelocity().y <= 0){
+                setVelocityY(wallJumpYSpeed);
+                if (getWallOnLeft()){
+                    setVelocityX(wallJumpXSpeed);
                 } else {
-                    SetVelocityX(-wallJumpXSpeed);
+                    setVelocityX(-wallJumpXSpeed);
                 }
                 wallJumpTimer = wallJumpControl;
                 setGrounded(false);

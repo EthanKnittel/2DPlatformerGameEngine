@@ -21,18 +21,18 @@ public class AnimationManager {
     }
 
     // pour changer d'animation (genre courir → marcher)
-    public  void SetAnimation(Animation<TextureRegion> Newanimation) {
+    public  void setAnimation(Animation<TextureRegion> Newanimation) {
         if (this.animation != Newanimation) {
             this.animation = Newanimation;
             stateTime = 0f; // on réinitialise le temps de la nouvelle animation
         }
     }
 
-    public void SetStateTime(float stateTime) {
+    public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
     }
 
-    public float GetAnimationDuration() {
+    public float getAnimationDuration() {
         return animation.getAnimationDuration();
 
     }

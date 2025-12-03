@@ -14,12 +14,29 @@ public abstract class Entity implements Evolving,Disposable {
     private boolean collision = false;
     private boolean affectedByGravity = false;
     private static float default_gravity = -980f/ GameScreen.getPixelsPerBlocks();
+    private boolean isAgent = false;
+    private boolean isEnemy = false;
 
     public Entity(float x, float y,  float width, float height) {
         // on initialise le vecteur de LibGDX
         this.position = new Vector2(x, y);
         // limites du rectangle de hitbox
         this.bounds = new Rectangle(x, y, width, height);
+    }
+
+    public boolean getIsEnemy(){
+        return isEnemy;
+    }
+    public void setIsEnemy(boolean isEnemy){
+        this.isEnemy = isEnemy;
+    }
+
+    public boolean getIsAgent() {
+        return isAgent;
+    }
+
+    public void setIsAgent(boolean isAgent) {
+        this.isAgent = isAgent;
     }
 
     @Override
@@ -30,51 +47,51 @@ public abstract class Entity implements Evolving,Disposable {
     @Override
     public abstract void dispose();
 
-    public float GetX() {
+    public float getX() {
         return  position.x;
     }
-    public float GetY() {
+    public float getY() {
         return  position.y;
     }
 
-    public Rectangle GetBounds() {
+    public Rectangle getbounds() {
         return bounds;
     }
-    public void SetPosXY(float x, float y) {
+    public void setPosXY(float x, float y) {
         position.set(x, y);
         bounds.setPosition(x,y);
     }
-    public Vector2 GetVelocity() {
+    public Vector2 getVelocity() {
         return velocity;
     }
-    public void SetVelocityX(float x) {
+    public void setVelocityX(float x) {
         velocity.x = x;
     }
-    public void SetVelocityY(float y) {
+    public void setVelocityY(float y) {
         velocity.y = y;
     }
-    public void SetVelocity(float x, float y) {
+    public void setVelocity(float x, float y) {
         velocity.x = x;
         velocity.y = y;
     }
 
-    public boolean GetCollision() {
+    public boolean getCollision() {
         return collision;
     }
-    public void SetCollision(boolean collision) {
+    public void setCollision(boolean collision) {
         this.collision = collision;
     }
 
-    public boolean GetAffectedByGravity() {
+    public boolean getAffectedByGravity() {
         return affectedByGravity;
     }
-    public void SetAffectedByGravity(boolean affectedByGravity) {
+    public void setAffectedByGravity(boolean affectedByGravity) {
         this.affectedByGravity = affectedByGravity;
     }
-    public void Setgravity(float gravity) {
+    public void setGravity(float gravity) {
         default_gravity = gravity;
     }
-    public static float GetGravity() {
+    public static float getGravity() {
         return default_gravity;
     }
 }
