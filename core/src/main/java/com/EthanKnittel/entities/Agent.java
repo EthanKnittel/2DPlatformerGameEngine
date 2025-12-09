@@ -17,6 +17,13 @@ public abstract class Agent extends Entity {
     private static float wallSlideSpeed = -200f/ GameScreen.getPixelsPerBlocks();
     private float moveSpeed = 150f/ GameScreen.getPixelsPerBlocks();
     private float jumpSpeed = 400f/ GameScreen.getPixelsPerBlocks();
+    private float invincibilityTimer = 0f;
+    private boolean isHit = false;
+    private float hitStunDuration = 0.4f; //
+    private float hitTimer = 0f;
+    private float invincibilityDuration = 1.0f;
+    private float visualHitTimer = 0f;
+    private float visualHitDuration = 0.2f;
 
     private AnimationManager animationManager;
     private boolean facingLeft = false;
@@ -99,11 +106,60 @@ public abstract class Agent extends Entity {
         }
     }
 
+    public void takeDamage(int amount) {
+        if (invincibilityTimer > 0) return; // invincible = 0 dégats
+
+        this.currenthealth -= amount;
+        if (this.currenthealth < 0) this.currenthealth = 0;
+
+        if (hitStunDuration > 0){
+            this.isHit=true;
+            this.hitTimer = hitStunDuration;
+        }
+
+        this.visualHitTimer = visualHitDuration;
+
+        this.invincibilityTimer = invincibilityDuration;
+
+        // effet knockback
+        this.setVelocityY(100f / GameScreen.getPixelsPerBlocks());
+        this.setVelocityX(100f / GameScreen.getPixelsPerBlocks());
+    }
+
     @Override
     public void update(float deltaTime) {
+        if (invincibilityTimer > 0) {
+            invincibilityTimer -= deltaTime;
+        }
+        if (isHit) {
+            hitTimer -= deltaTime;
+            if (hitTimer <= 0) {
+                isHit = false;
+            }
+        }
+        if (visualHitTimer > 0) {
+            visualHitTimer -= deltaTime;
+        }
         if (animationManager != null) {
             animationManager.update(deltaTime);
         }
+    }
+
+    public boolean isHit() {
+        return isHit;
+    }
+    public boolean getVisualHitActive() {
+        return visualHitTimer > 0;
+    }
+    public void setVisualHitDuration(float duration) {
+        this.visualHitDuration = duration;
+    }
+
+    public void setHitStunDuration(float hitStunDuration) {
+        this.hitStunDuration = hitStunDuration;
+    }
+    public void setInvincibilityDuration(float invincibilityDuration) {
+        this.invincibilityDuration = invincibilityDuration;
     }
 
     @Override

@@ -37,4 +37,8 @@ public abstract class Foe extends Agent {
             setFacingLeft(false);
         }
     }
+
+    public Player getTarget() {
+        return target;
+    }
 }

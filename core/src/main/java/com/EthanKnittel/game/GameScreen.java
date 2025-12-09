@@ -9,11 +9,15 @@ import com.EthanKnittel.entities.agents.Player;
 import com.EthanKnittel.world.TiledLevel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 public class GameScreen implements Screen {
 
@@ -25,6 +29,10 @@ public class GameScreen implements Screen {
     private Player player;
     private Environment environment;
     private static final float PixelsPerBlocks = 16f;
+
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
+    private boolean isGameOver = false;
 
     @Override
     public void show() {
@@ -42,6 +50,10 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
 
+        shapeRenderer = new ShapeRenderer();
+        font = new BitmapFont();
+        font.getData().setScale(2.0f / PixelsPerBlocks);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800/PixelsPerBlocks, 600/PixelsPerBlocks);
 
@@ -50,7 +62,7 @@ public class GameScreen implements Screen {
         float playerWidth= 32f/PixelsPerBlocks;
         float playerHeight = 32f/PixelsPerBlocks;
 
-        player = new Player(10f,2f,playerWidth,playerHeight,100, 20, keyboardInput, mouseInput);
+        player = new Player(10f,2f,playerWidth,playerHeight,100, 20, 2, keyboardInput, mouseInput);
 
         try {
             TiledLevel level = new TiledLevel("TiledLevels/4.tmx");
@@ -60,7 +72,8 @@ public class GameScreen implements Screen {
             }
             if (level.getCactusSpawnPoints() != null){
                 for (Vector2 spawn : level.getCactusSpawnPoints()){
-                    Cactus cactus = new Cactus(spawn.x, spawn.y, player);
+                    System.out.println("Spawn cactus" + spawn + "level" +  level.getCactusSpawnPoints());
+                    Cactus cactus = new Cactus(spawn.x, spawn.y, player, environment.getEntities());
                     environment.addEntity(cactus);
                 }
             }
@@ -75,13 +88,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Update de nos inputs
-        keyboardInput.update();
-        mouseInput.update();
         // on bride le delta
         // (sinon lorsqu'on "secoue" la fenêtre notre personnage passe à travers les murs)
         float effectiveDelta = Math.min(delta, 1/16f);
 
+        if (player.getCurrenthealth() <= 0) {
+            isGameOver = true;
+        }
 
         // Update de toutes les entités dont le joueur
         environment.update(effectiveDelta);
@@ -97,6 +110,35 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         environment.render(batch, camera);
+
+        // Update de nos inputs
+        keyboardInput.update();
+        mouseInput.update();
+
+        if (isGameOver) {
+            // Fond noir transparent
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, 0.7f);
+            shapeRenderer.rect(camera.position.x - camera.viewportWidth/2,
+                camera.position.y - camera.viewportHeight/2,
+                camera.viewportWidth,
+                camera.viewportHeight);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+            // Texte Rouge
+            batch.begin();
+            font.setColor(Color.RED);
+            font.draw(batch, "DEAD",
+                camera.position.x,
+                camera.position.y,
+                0, Align.center, false);
+            batch.end();
+        }
     }
 
     @Override

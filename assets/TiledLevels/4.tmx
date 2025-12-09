@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="34" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="88">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="34" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="1078">
  <tileset firstgid="1" name="GUI" tilewidth="16" tileheight="16" tilecount="105" columns="15">
   <image source="GUI.png" width="240" height="112"/>
  </tileset>
@@ -47,102 +47,7 @@
 282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0,282,0,0,0
 </data>
  </layer>
- <group id="8" name="AI_paths">
-  <objectgroup id="11" name="AI_links"/>
-  <objectgroup id="9" name="AI_nodes">
-   <object id="7" x="4" y="188">
-    <point/>
-   </object>
-   <object id="8" x="31" y="237.5">
-    <point/>
-   </object>
-   <object id="9" x="73.5" y="269">
-    <point/>
-   </object>
-   <object id="10" x="299.5" y="270">
-    <point/>
-   </object>
-   <object id="11" x="360" y="237.5">
-    <point/>
-   </object>
-   <object id="12" x="463" y="237">
-    <point/>
-   </object>
-   <object id="13" x="516" y="189">
-    <point/>
-   </object>
-   <object id="14" x="671.5" y="77">
-    <point/>
-   </object>
-   <object id="15" x="622.5" y="157">
-    <point/>
-   </object>
-   <object id="16" x="551.5" y="204.5">
-    <point/>
-   </object>
-   <object id="17" x="567.5" y="221.5">
-    <point/>
-   </object>
-   <object id="18" x="582.5" y="253">
-    <point/>
-   </object>
-   <object id="19" x="599.5" y="285">
-    <point/>
-   </object>
-   <object id="20" x="615.5" y="348.5">
-    <point/>
-   </object>
-   <object id="21" x="632" y="397.5">
-    <point/>
-   </object>
-   <object id="22" x="720.5" y="333">
-    <point/>
-   </object>
-   <object id="23" x="673" y="509">
-    <point/>
-   </object>
-   <object id="24" x="495" y="509">
-    <point/>
-   </object>
-   <object id="25" x="447.5" y="478.5">
-    <point/>
-   </object>
-   <object id="26" x="546.5" y="414">
-    <point/>
-   </object>
-   <object id="27" x="352" y="509.5">
-    <point/>
-   </object>
-   <object id="28" x="390" y="493">
-    <point/>
-   </object>
-   <object id="29" x="408" y="478.5">
-    <point/>
-   </object>
-   <object id="30" x="303.5" y="428.5">
-    <point/>
-   </object>
-   <object id="31" x="175" y="365.5">
-    <point/>
-   </object>
-   <object id="32" x="95.5" y="443.5">
-    <point/>
-   </object>
-   <object id="33" x="61.5" y="459.5">
-    <point/>
-   </object>
-   <object id="34" x="142" y="510">
-    <point/>
-   </object>
-   <object id="35" x="235" y="509">
-    <point/>
-   </object>
-   <object id="78" x="38.5" y="506">
-    <point/>
-   </object>
-  </objectgroup>
- </group>
- <layer id="3" name="Tiles" width="50" height="34" visible="0" locked="1">
+ <layer id="3" name="Tiles" width="50" height="34" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -193,11 +98,11 @@
 18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,16,17,
 18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,16,17,
 18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,16,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
-33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0,0,0,16,17,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,16,17,
-3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
+18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
+18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
+18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0,0,0,16,17,
+18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,33,0,0,0,0,0,0,0,0,16,17,
+18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
 18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
 18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,16,1,3,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
 19,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,20,17,16,16,18,0,0,0,0,0,0,0,0,0,0,0,0,16,17,
@@ -262,7 +167,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="truc devant" width="50" height="34" visible="0">
+ <layer id="5" name="truc devant" width="50" height="34">
   <properties>
    <property name="above" type="bool" value="true"/>
   </properties>
@@ -303,17 +208,123 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="Setup" visible="0">
-  <object id="3" x="163.008" y="363.097">
+ <objectgroup id="6" name="Setup">
+  <object id="3" x="174.675" y="260.43">
    <properties>
     <property name="playerSpawnPoint" type="bool" value="true"/>
    </properties>
    <point/>
   </object>
-  <object id="6" x="660" y="485.333">
+  <object id="287" x="244" y="392">
    <properties>
-    <property name="CactusSpawn" type="bool" value="false"/>
+    <property name="CactusSpawn" type="bool" value="true"/>
    </properties>
+   <point/>
+  </object>
+  <object id="1070" x="370.667" y="416">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1071" x="332" y="454.667">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1072" x="476" y="389.333">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1073" x="453.333" y="452">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1074" x="594.667" y="482.667">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1075" x="244" y="444">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1076" x="160" y="450.667">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1077" x="112" y="396">
+   <properties>
+    <property name="CactusSpawn" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="15" name="Calque d'Objets 2" visible="0">
+  <object id="105" x="0" y="21.3333" width="338.667" height="246.667"/>
+  <object id="106" x="314.667" y="21.3333" width="361.333" height="232"/>
+  <object id="107" x="574.667" y="21.3333" width="202.667" height="506.667"/>
+  <object id="108" x="304" y="266.667" width="317.333" height="274.667"/>
+  <object id="109" x="-12" y="274.667" width="369.333" height="294.667"/>
+  <object id="110" x="42.6667" y="96">
+   <point/>
+  </object>
+  <object id="111" x="268" y="237.333">
+   <point/>
+  </object>
+  <object id="112" x="254.667" y="94.6667">
+   <point/>
+  </object>
+  <object id="113" x="88" y="233.333">
+   <point/>
+  </object>
+  <object id="114" x="405.333" y="90.6667">
+   <point/>
+  </object>
+  <object id="115" x="412" y="214.667">
+   <point/>
+  </object>
+  <object id="116" x="510.667" y="149.333">
+   <point/>
+  </object>
+  <object id="117" x="646.667" y="325.333">
+   <point/>
+  </object>
+  <object id="118" x="682.667" y="421.333">
+   <point/>
+  </object>
+  <object id="119" x="610.667" y="462.667">
+   <point/>
+  </object>
+  <object id="120" x="528" y="426.667">
+   <point/>
+  </object>
+  <object id="121" x="466.667" y="474.667">
+   <point/>
+  </object>
+  <object id="122" x="366.667" y="434.667">
+   <point/>
+  </object>
+  <object id="123" x="304" y="408">
+   <point/>
+  </object>
+  <object id="124" x="201.333" y="442.667">
+   <point/>
+  </object>
+  <object id="125" x="105.333" y="466.667">
+   <point/>
+  </object>
+  <object id="126" x="34.6667" y="430.667">
    <point/>
   </object>
  </objectgroup>

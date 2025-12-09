@@ -3,6 +3,8 @@ package com.EthanKnittel.world;
 import com.EthanKnittel.Evolving;
 import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
+import com.EthanKnittel.entities.agents.Foe;
+import com.EthanKnittel.entities.agents.Player;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
@@ -35,7 +37,8 @@ public class Environment implements Disposable, Evolving {
     @Override
     public void update(float deltaTime) {
         // mise à jour des entités
-        for (Entity entity : entities) {
+        for (int i = 0; i < entities.size; i++) {
+            Entity entity = entities.get(i); // On récupère l'entité manuellement
             entity.update(deltaTime);
         }
         for (int i = 0; i < entities.size; i++) {
@@ -74,13 +77,22 @@ public class Environment implements Disposable, Evolving {
 
                     Entity other = entities.get(j);
 
+                    Rectangle entityBounds = entity.getbounds();
+                    Rectangle otherBounds = other.getbounds();
+
+                    if(entityBounds.overlaps(otherBounds)){
+                        if (entity.getIsEnemy() && other.getIsPlayer()){
+                            ((Player) other).takeDamage(((Foe) entity).getDamage());
+                        } else if (entity.getIsPlayer() && other.getIsEnemy()){
+                            ((Player) entity).takeDamage(((Foe) other).getDamage());
+
+                        }
+                    }
+
                     // on ne vérifie que contre les entités "solides"
                     if (!other.getCollision()) {
                         continue;
                     }
-
-                    Rectangle entityBounds = entity.getbounds();
-                    Rectangle otherBounds = other.getbounds();
 
                     Rectangle futureBoundsX = new Rectangle(entityBounds.x + potentialDeltaX, entityBounds.y, entityBounds.width, entityBounds.height);
 
@@ -145,5 +157,9 @@ public class Environment implements Disposable, Evolving {
         for (Entity entity : entities) {
             entity.dispose();
         }
+    }
+
+    public Array<Entity> getEntities() { // servira au RayCasting pour les mobs
+        return entities;
     }
 }

@@ -16,6 +16,8 @@ public abstract class Entity implements Evolving,Disposable {
     private static float default_gravity = -980f/ GameScreen.getPixelsPerBlocks();
     private boolean isAgent = false;
     private boolean isEnemy = false;
+    private boolean isPlayer = false;
+
 
     public Entity(float x, float y,  float width, float height) {
         // on initialise le vecteur de LibGDX
@@ -37,6 +39,12 @@ public abstract class Entity implements Evolving,Disposable {
 
     public void setIsAgent(boolean isAgent) {
         this.isAgent = isAgent;
+    }
+    public void setIsPlayer(boolean isPlayer) {
+        this.isPlayer = isPlayer;
+    }
+    public boolean getIsPlayer(){
+        return isPlayer;
     }
 
     @Override
