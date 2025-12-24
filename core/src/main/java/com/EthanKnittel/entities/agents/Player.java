@@ -4,13 +4,16 @@ import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.inputs.KeyboardInput;
 import com.EthanKnittel.inputs.MouseInput;
-import com.EthanKnittel.graphics.AnimationManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.EthanKnittel.world.Environment;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
+import com.EthanKnittel.entities.artifacts.FireArrow;
 
 public class Player extends Agent {
     private final KeyboardInput keyboard;
@@ -25,16 +28,18 @@ public class Player extends Agent {
     private final float wallJumpXSpeed = 300f/ GameScreen.getPixelsPerBlocks();
     private float wallJumpTimer = 0f;
     private final float wallJumpControl = 0.1f; // temps avant de pouvoir recontroler notre personnage
-    private transient AnimationManager animationManager;
     private int jumpCount = 0;
-    private boolean jumpKeyPressed = false;
     private int jumpCountMax;
+    private Environment environment;
+    private OrthographicCamera camera;
 
     private transient Texture spriteSheet;
 
 
-    public Player(float x, float y,float width, float height, int maxHealth, int damage, int jumpCountMax, KeyboardInput keyboard, MouseInput mouse) {
+    public Player(float x, float y,float width, float height, int maxHealth, int damage, int jumpCountMax, KeyboardInput keyboard, MouseInput mouse, Environment env, OrthographicCamera cam) {
         super(x,y,width, height, maxHealth, damage);
+        this.environment = env;
+        this.camera = cam;
         this.jumpCountMax = jumpCountMax;
         this.keyboard = keyboard;
         this.mouse = mouse;
@@ -83,6 +88,10 @@ public class Player extends Agent {
 
         super.update(deltaTime); // update des animations provenant de Agent
 
+        if (mouse.isButtonDownNow(0)) {
+            shoot();
+        }
+
         if(getGrounded()){
             jumpCount = 0;
             setVelocityX(0);
@@ -116,7 +125,7 @@ public class Player extends Agent {
                 setVelocityY(jumpSpeed);
                 setGrounded(false);
                 jumpCount = 1;
-            } else if (getTouchingWall() && !getGrounded()){
+            } else if (getTouchingWall() && !getGrounded() && jumpCount < jumpCountMax) {
                 setVelocityY(wallJumpYSpeed);
                 if (getWallOnLeft()){
                     setVelocityX(wallJumpXSpeed);
@@ -125,7 +134,7 @@ public class Player extends Agent {
                 }
                 wallJumpTimer = wallJumpControl;
                 setGrounded(false);
-                jumpCount = 1;
+                jumpCount++;
             } else if (jumpCount < jumpCountMax){
                 setVelocityY(jumpSpeed);
                 if (jumpCount == 0){
@@ -139,7 +148,7 @@ public class Player extends Agent {
         // animations
         if (getVisualHitActive()){
             setAnimation(hitAnim);
-        } else if (getTouchingWall() && !getGrounded()){
+        } else if (getTouchingWall() && !getGrounded() && getVelocity().y<0){
             setAnimation(wallSlideAnim);
         } else if (!getGrounded()) {
             if (getVelocity().y<0){
@@ -179,4 +188,22 @@ public class Player extends Agent {
         }
     }
 
+    private void shoot() {
+        // 1. Position Souris Écran
+        int screenX = mouse.GetPosX();
+        int screenY = mouse.GetPosY();
+
+        // 2. Conversion en Monde
+        Vector3 worldPos = new Vector3(screenX, screenY, 0);
+        camera.unproject(worldPos);
+
+        // 3. Départ du centre du joueur
+        float startX = getX() + getbounds().width / 2f;
+        float startY = getY() + getbounds().height / 2f;
+
+        // 4. Création et Ajout
+        FireArrow arrow = new FireArrow(startX, startY, worldPos.x, worldPos.y);
+        environment.addEntity(arrow);
+    }
 }
+

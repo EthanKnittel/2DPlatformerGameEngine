@@ -57,7 +57,6 @@ public class TiledLevel extends Level{
         MapLayer setuplayer = map.getLayers().get(SetupLayerName);
         if (setuplayer != null) {
             for (MapObject object : setuplayer.getObjects()) {
-                System.out.println(object.getProperties());
                 if (object.getProperties().containsKey("playerSpawnPoint")) {
                     float x = object.getProperties().get("x", Float.class);
                     float y = object.getProperties().get("y", Float.class);

@@ -10,7 +10,7 @@ public class ChaseStrategy implements EnemyStategy {
     private static final float deadZone = 0.5f;
 
     @Override
-    public Vector2 calculateMove(float currentX, float currentY, boolean isGrounded, boolean isTouchingWall, Player player, float deltaTime, float entitySpeed, float entityJumpForce) {
+    public Vector2 calculateMove(float currentX, float currentY, boolean isGrounded, boolean isTouchingWall,boolean isTouchingAlly, Player player, float deltaTime, float entitySpeed, float entityJumpForce) {
         output.set(0,0);
 
         float distanceToPlayerX= player.getX() - currentX;
@@ -48,4 +48,8 @@ public class ChaseStrategy implements EnemyStategy {
         return output;
     }
 
+    @Override
+    public boolean enableSeparation() {
+        return true;
+    }
 }

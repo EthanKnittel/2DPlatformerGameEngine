@@ -30,7 +30,7 @@ public class Cactus extends Foe {
     private Array<Entity> allentities;
 
     public Cactus(float x, float y, Player target, Array<Entity> allentities) {
-        super(x,y,32f/ GameScreen.getPixelsPerBlocks(), 32f/GameScreen.getPixelsPerBlocks(), 50, 10, target);
+        super(x,y,32f/ GameScreen.getPixelsPerBlocks(), 32f/GameScreen.getPixelsPerBlocks(), 50, 1, target);
         this.allentities = allentities;
         this.currentState = State.Patrol;
         this.setStrategy(new PatrolStrategy());

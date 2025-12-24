@@ -17,6 +17,7 @@ public abstract class Entity implements Evolving,Disposable {
     private boolean isAgent = false;
     private boolean isEnemy = false;
     private boolean isPlayer = false;
+    private boolean canBeRemove = false;
 
 
     public Entity(float x, float y,  float width, float height) {
@@ -101,5 +102,12 @@ public abstract class Entity implements Evolving,Disposable {
     }
     public static float getGravity() {
         return default_gravity;
+    }
+    public void setCanBeRemove(boolean canBeRemove) {
+        this.canBeRemove = canBeRemove;
+    }
+
+    public boolean getCanBeRemove() {
+        return this.canBeRemove;
     }
 }
