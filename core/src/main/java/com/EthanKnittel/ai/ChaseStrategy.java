@@ -23,10 +23,10 @@ public class ChaseStrategy implements EnemyStategy {
                 output.x = entitySpeed;
             }
         } else {
-            output.x = 0; // si le x est suffisament proche, on se stoppe pour éviter des flips constant du sprite
+            output.x = 0; // si le x est suffisament proche, on se stoppe pour éviter des flips constant du sprite et avoir une genre de "crise d'épilepsie" du monstre
         }
 
-        boolean needToJump = false; // pour éviter des sauts inutiles (ou faire des sauts utiles)
+        boolean needToJump = false; // pour éviter des sauts inutiles (ou pour faire des sauts utiles)
 
         if (isTouchingWall && isGrounded && Math.abs(distanceToPlayerX)> 3.0f){
             walltimer += deltaTime;

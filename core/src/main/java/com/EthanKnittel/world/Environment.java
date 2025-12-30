@@ -5,6 +5,8 @@ import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.agents.Foe;
 import com.EthanKnittel.entities.agents.Player;
+import com.EthanKnittel.entities.artifacts.FireArrow;
+import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.game.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,7 +39,7 @@ public class Environment implements Disposable, Evolving {
 
     @Override
     public void update(float deltaTime) {
-        // 1. Mise à jour de la logique (IA, animations...)
+        // On met les entités à jour
 
         for (int i = entities.size - 1; i >= 0; i--) {
             if (entities.get(i).getCanBeRemove()) {
@@ -50,11 +52,11 @@ public class Environment implements Disposable, Evolving {
             entity.update(deltaTime);
         }
 
-        // 2. Physique et Collisions
+        // Gestion de la physique / collisions
         for (int i = 0; i < entities.size; i++) {
             Entity entity = entities.get(i);
 
-            // --- A. Gravité et état Agent ---
+            // Gravité et gestion des états des mobs Agents
             if (entity.getAffectedByGravity()) {
                 entity.getVelocity().y += Entity.getGravity() * deltaTime;
             }
@@ -69,41 +71,35 @@ public class Environment implements Disposable, Evolving {
                 agent.setIsTouchingWall(false, false);
             }
 
-            // Calcul du déplacement voulu (Vitesse normale)
+            // Calcul du déplacement
             float potentialDeltaX = entity.getVelocity().x * deltaTime;
             float potentialDeltaY = entity.getVelocity().y * deltaTime;
 
-            // --- B. Anti-Stacking (Séparation des Monstres) ---
-            // On le fait AVANT de vérifier les murs pour que le déplacement total soit testé
-            if (entity instanceof Foe) {
-                Foe currentFoe = (Foe) entity; // Cast pour accéder aux méthodes Foe
+            // gestion de séparation des monstres (pour éviter la superposition)
+            if (entity.getIsEnemy()) {
+                Foe currentFoe = (Foe) entity;
                 currentFoe.setTouchingAlly(false);
 
                 for (int k = 0; k < entities.size; k++) {
                     if (i == k) continue;
                     Entity other = entities.get(k);
 
-                    if (other instanceof Foe) {
+                    if (other.getIsEnemy()) {
 
-                        // 1. Calculer la distance / le "coeur"
+                        // On calcul la séparation des mobs avec un "coeur" (pour qu'il ne soit pas parfaitement superposés)
                         float diffX = entity.getX() - other.getX();
                         float dist = Math.abs(diffX);
                         float threshold = 16f / GameScreen.getPixelsPerBlocks(); // Taille du coeur
 
-                        // Si on est dans le "coeur" de l'autre
+                        // Si on est dans le "coeur" de l'autre -> superposé
                         if (dist < threshold) {
-
-                            // ETAPE A : INFORMATION (Pour PatrolStrategy)
-                            // On prévient le monstre qu'il touche quelqu'un.
-                            // PatrolStrategy utilisera ça pour changer de direction au prochain frame.
+                            // On indique qu'il y a superposition -> les Strategy géreront les changements de directions si besoin (comme Patrol)
                             currentFoe.setTouchingAlly(true);
 
-
-                            // ETAPE B : RÉACTION PHYSIQUE (Pour ChaseStrategy)
-                            // On ne pousse QUE si la stratégie le demande
+                            // Pour les stratégies de type Chase où l'on doit continuer sur une même direction, on effectue une séparation forcée
                             if (currentFoe.shouldUseRepulsion()) {
 
-                                float pushStrength = 150f / GameScreen.getPixelsPerBlocks();
+                                float pushStrength = 10f / GameScreen.getPixelsPerBlocks();
                                 float pushAmount = pushStrength * deltaTime;
 
                                 if (dist < 0.01f) {
@@ -117,39 +113,39 @@ public class Environment implements Disposable, Evolving {
                 }
             }
 
-            if (entity instanceof com.EthanKnittel.entities.artifacts.FireArrow) {
-                com.EthanKnittel.entities.artifacts.FireArrow arrow = (com.EthanKnittel.entities.artifacts.FireArrow) entity;
+            if (entity.getClass().equals(FireArrow.class)) {
+                FireArrow projectile = (FireArrow) entity;
 
                 for (int j = 0; j < entities.size; j++) {
                     if (i == j) continue;
                     Entity other = entities.get(j);
 
-                    if (arrow.getbounds().overlaps(other.getbounds())) {
+                    if (projectile.getbounds().overlaps(other.getbounds())) {
 
-                        // Si touche un Mur -> Destruction
-                        if (other instanceof com.EthanKnittel.entities.artifacts.Wall) {
-                            arrow.setCanBeRemove(true);
+                        // Si touche un wall -> destruction
+                        if (other.getClass().equals(Wall.class)) {
+                            projectile.setCanBeRemove(true);
                             break;
                         }
 
-                        // Si touche un Monstre -> Dégâts + Destruction
-                        if (other instanceof Foe) {
-                            ((Foe) other).takeDamage(arrow.getDamage());
-                            arrow.setCanBeRemove(true);
+                        // Si touche un mob -> dégâts + destruction
+                        if (other.getIsEnemy()) {
+                            ((Foe) other).takeDamage(projectile.getDamage());
+                            projectile.setCanBeRemove(true);
                             break;
                         }
                     }
                 }
-                continue; // La flèche n'a pas besoin de la physique de collision standard (bloquante)
+                continue; // le projectile n'est pas affecté par le reste des mises à jour de collisions
             }
 
-            // Si après tout ça, l'entité ne bouge toujours pas, on passe (optimisation)
+            // Si après tout ça, l'entité ne bouge toujours pas, on passe (pour accélérer et opti un peu le programme)
             if (potentialDeltaX == 0 && potentialDeltaY == 0) {
                 continue;
             }
 
-            // --- C. Collisions avec le monde et les autres ---
-            if (!entity.getCollision()) { // Si ce n'est pas un mur (donc c'est un acteur)
+            // Collisions avec le monde et les autres entités
+            if (!entity.getCollision()) { // Si ce n'est pas un mur (donc c'est un mob, un npc ou un joueur)
 
                 for (int j = 0; j < entities.size; j++) {
                     if (i == j) continue;
@@ -158,7 +154,7 @@ public class Environment implements Disposable, Evolving {
                     Rectangle entityBounds = entity.getbounds();
                     Rectangle otherBounds = other.getbounds();
 
-                    // 1. Dégâts (Overlap simple)
+                    // Dégâts (si il y a simplement superposition)
                     if (entityBounds.overlaps(otherBounds)) {
                         if (entity.getIsEnemy() && other.getIsPlayer()) {
                             ((Player) other).takeDamage(((Foe) entity).getDamage());
@@ -167,12 +163,12 @@ public class Environment implements Disposable, Evolving {
                         }
                     }
 
-                    // 2. Physique Solide (Murs)
+                    // Physique des wall
                     if (!other.getCollision()) {
-                        continue; // On ne teste la physique que contre les murs
+                        continue; // On ne teste la physique que contre les murs (petite optimisation)
                     }
 
-                    // Test Axe X (avec le potentialDeltaX qui contient la poussée !)
+                    // Test de l'axe X
                     Rectangle futureBoundsX = new Rectangle(entityBounds.x + potentialDeltaX, entityBounds.y, entityBounds.width, entityBounds.height);
 
                     if (potentialDeltaX != 0 && futureBoundsX.overlaps(otherBounds)) {
@@ -188,11 +184,11 @@ public class Environment implements Disposable, Evolving {
                             ((Agent) entity).setIsTouchingWall(true, wallIsOnLeft);
                         }
                         entity.getVelocity().x = 0;
-                        potentialDeltaX = 0; // Le mur annule tout mouvement (y compris la poussée)
+                        potentialDeltaX = 0; // Le mur annule tout mouvement
                     }
 
-                    // Mise à jour temp pour tester Y correctement
-                    entityBounds.x = entity.getX(); // Important: on utilise la position réelle potentiellement corrigée
+                    // Mise à jour temporaire pour tester l'axe des Y correctement
+                    entityBounds.x = entity.getX();
 
                     // Test Axe Y
                     Rectangle futureBoundsY = new Rectangle(entityBounds.x, entityBounds.y + potentialDeltaY, entityBounds.width, entityBounds.height);
@@ -212,7 +208,7 @@ public class Environment implements Disposable, Evolving {
                 }
             }
 
-            // --- D. Application finale du mouvement ---
+            // Application finale du mouvement
             if (potentialDeltaX != 0 || potentialDeltaY != 0) {
                 entity.setPosXY(entity.getX() + potentialDeltaX, entity.getY() + potentialDeltaY);
             }
@@ -245,5 +241,9 @@ public class Environment implements Disposable, Evolving {
 
     public Array<Entity> getEntities() {
         return entities;
+    }
+
+    public Level getLevel() {
+        return currentlevel;
     }
 }

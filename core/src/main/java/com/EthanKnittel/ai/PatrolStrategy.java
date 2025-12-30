@@ -18,29 +18,21 @@ public class PatrolStrategy implements EnemyStategy {
         // Condition de changement
         if (timer > changeMove || (isTouchingWall && currentDirection != 0) || (isTouchingAlly && timer > 0.2f)) {
 
-            if (isTouchingAlly) {
-                // --- CAS SPÉCIAL : COLLISION ENTRE MONSTRES ---
-
-                // 1. On brise la symétrie : On force un choix aléatoire (Gauche ou Droite)
-                // Même si on bougeait déjà, on re-tente sa chance.
-                // Ça permet parfois à deux monstres de partir dans la MEME direction (l'un chasse l'autre),
-                // mais comme ils ont des vitesses légèrement différentes ou des timers différents, ils finiront par se séparer.
-                // Surtout, ça évite l'effet miroir parfait.
-                currentDirection = MathUtils.randomBoolean() ? 1 : -1;
-
-                // 2. LE SECRET EST ICI : Décalage temporel
-                // On donne un temps d'attente (immunité) ALÉATOIRE.
-                // L'un va reprendre sa logique dans 0.5s, l'autre dans 1.2s.
-                // Ce décalage suffit à briser la synchronisation "main dans la main".
-                timer = -MathUtils.random(0.5f, 1.5f);
-
-            } else {
-                // --- CAS NORMAL ---
+            if (isTouchingAlly && timer != 0) {
+                // On force un choix aléatoire pour essayer de briser la superposition en mode Patrol, sans mettre de collisions
+                // le but est de les "séparer" de manière naturelle.
                 int choice = MathUtils.random(2);
                 if (choice == 0) currentDirection = -1;
                 else if (choice == 1) currentDirection = 1;
                 else currentDirection = 0;
+                // on donne ici un timer aléatoire pour (espérer) briser la superposition
+                timer = -MathUtils.random(0.5f, 1.5f);
 
+            } else {
+                int choice = MathUtils.random(2);
+                if (choice == 0) currentDirection = -1;
+                else if (choice == 1) currentDirection = 1;
+                else currentDirection = 0;
                 timer = 0f;
             }
 

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class KeyboardInput implements InputProcessor {
 
-    // Nombre de touches max géré par LibGDX (ce nombre ne sera pas modifié
+    // Nombre de touches max géré par LibGDX
     private static final int MAX_KEYS = Input.Keys.MAX_KEYCODE + 1;
     // Liste de booléen pour savoir si chaque touche est enfoncé
     private final boolean[] keysDown = new boolean[MAX_KEYS];

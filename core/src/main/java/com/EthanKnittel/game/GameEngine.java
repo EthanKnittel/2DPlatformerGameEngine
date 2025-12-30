@@ -7,7 +7,7 @@ public class GameEngine extends Game {
 
     @Override
     public void create() {
-        //on lance le premier écran de jeu
+        // On lance le premier écran de jeu
         setScreen(new GameScreen());
     }
 

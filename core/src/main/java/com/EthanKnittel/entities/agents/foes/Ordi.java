@@ -2,7 +2,6 @@ package com.EthanKnittel.entities.agents.foes;
 
 import com.EthanKnittel.ai.ChaseStrategy;
 import com.EthanKnittel.ai.PatrolStrategy;
-import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.agents.Foe;
 import com.EthanKnittel.entities.agents.Player;
@@ -16,11 +15,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class Cactus extends Foe {
+public class Ordi extends Foe {
     private TextureAtlas atlas;
     private Animation<TextureRegion> idleAnim, runAnim, hitAnim, fallAnim, jumpAnim;
     private enum State {Patrol, Chase};
-    private State currentState;
+    private Ordi.State currentState;
 
     // valeurs défini pour changer de stratégies / la garder
     private float detectionRadius = 10f;
@@ -29,10 +28,10 @@ public class Cactus extends Foe {
     private float lostSightCooldown = 2.0f;
     private Array<Entity> allentities;
 
-    public Cactus(float x, float y, Player target, Array<Entity> allentities) {
+    public Ordi(float x, float y, Player target, Array<Entity> allentities) {
         super(x,y,32f/ GameScreen.getPixelsPerBlocks(), 32f/GameScreen.getPixelsPerBlocks(), 50, 1, target);
         this.allentities = allentities;
-        this.currentState = State.Patrol;
+        this.currentState = Ordi.State.Patrol;
         this.setStrategy(new PatrolStrategy());
         this.setHitStunDuration(0.4f);
         this.setInvincibilityDuration(0.1f);
@@ -46,7 +45,7 @@ public class Cactus extends Foe {
 
     private void loadAnimations(){
         try{
-            atlas = new TextureAtlas(Gdx.files.internal("Ennemies/cactus/Cactus.atlas"));
+            atlas = new TextureAtlas(Gdx.files.internal("Ennemies/ordi/Ordi.atlas"));
 
             idleAnim = new Animation<>(0.1f, atlas.findRegions("IDLE"), Animation.PlayMode.LOOP);
             runAnim = new Animation<>(0.1f, atlas.findRegions("RUNNING"), Animation.PlayMode.LOOP);
@@ -56,7 +55,7 @@ public class Cactus extends Foe {
 
             setAnimation(idleAnim);
         } catch(Exception e){
-            Gdx.app.error("Cactus", "Erreur de chargement de l'atlas", e);
+            Gdx.app.error("Ordi", "Erreur de chargement de l'atlas", e);
         }
     }
 
@@ -84,9 +83,9 @@ public class Cactus extends Foe {
 
     private void updateAI(float deltaTime){
         Player player = this.getTarget();
-        if (player == null || !player.isAlive()) {
-            if (currentState != State.Patrol){
-                currentState=State.Patrol;
+        if (!player.isAlive()) {
+            if (currentState != Ordi.State.Patrol){
+                currentState= Ordi.State.Patrol;
                 this.setStrategy(new PatrolStrategy());
             }
             return;
@@ -94,17 +93,17 @@ public class Cactus extends Foe {
         float distance = Vector2.dst(this.getX(), this.getY(), player.getX(), player.getY());
         boolean canSeePlayer = hasLineOfSight(player);
 
-        if (currentState == State.Patrol) {
+        if (currentState == Ordi.State.Patrol) {
             if (distance < detectionRadius && canSeePlayer){
-                currentState = State.Chase;
+                currentState = Ordi.State.Chase;
                 this.setStrategy(new ChaseStrategy());
                 lostSightTimer = 0f;
             }
-        } else if (currentState == State.Chase) {
+        } else if (currentState == Ordi.State.Chase) {
             if (distance > looseRadius || !canSeePlayer){
                 lostSightTimer += deltaTime;
                 if (lostSightTimer >= lostSightCooldown){
-                    currentState = State.Patrol;
+                    currentState = Ordi.State.Patrol;
                     this.setStrategy(new PatrolStrategy());
                     lostSightTimer = 0f;
                 }
@@ -135,8 +134,7 @@ public class Cactus extends Foe {
 
     @Override
     public void dispose(){
-        if (atlas != null){
-            atlas.dispose();
-        }
+        atlas.dispose();
     }
 }
+

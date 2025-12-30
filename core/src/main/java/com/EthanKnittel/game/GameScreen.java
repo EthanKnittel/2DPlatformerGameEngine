@@ -1,6 +1,8 @@
 package com.EthanKnittel.game;
 
 import com.EthanKnittel.entities.agents.foes.Cactus;
+import com.EthanKnittel.entities.agents.foes.Ordi;
+import com.EthanKnittel.respawn.SpawnZone;
 import com.EthanKnittel.world.Environment;
 import com.EthanKnittel.world.TestLevel;
 import com.EthanKnittel.inputs.KeyboardInput;
@@ -31,7 +33,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 
-    // --- Core Game ---
     private KeyboardInput keyboardInput;
     private MouseInput mouseInput;
     private OrthographicCamera gameCamera;
@@ -41,24 +42,21 @@ public class GameScreen implements Screen {
     private static final float PixelsPerBlocks = 16f;
     private static float zoom = 1.5f;
 
-    // --- UI & States ---
     private Stage uiStage;
     private Skin skin;
     private boolean isPaused = false;
     private boolean isGameOver = false;
     private Viewport gameViewport;
 
-    // UI Tables
     private Table pauseTable;
     private Table deathTable;
 
-    // UI Buttons
     private TextButton resumeBtn;
     private TextButton quitBtn;
 
     @Override
     public void show() {
-        // 1. Initialisation du Jeu
+        // Initialisation du jeu
         keyboardInput = new KeyboardInput();
         mouseInput = new MouseInput();
         batch = new SpriteBatch();
@@ -70,13 +68,13 @@ public class GameScreen implements Screen {
         environment = new Environment();
         createPlayerAndLevel();
 
-        // 2. Initialisation de l'UI
+        // Initialisation de l'interface
         uiStage = new Stage(new FitViewport(800, 600), batch);
         createBasicSkin();
         createPauseMenu();
         createDeathScreen();
 
-        // 3. Gestion des Inputs
+        // Gestion des inputs dans le multiplexeur
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(keyboardInput);
         inputMultiplexer.addProcessor(mouseInput);
@@ -94,12 +92,9 @@ public class GameScreen implements Screen {
             if (level.getPlayerSpawnPoint() != null) {
                 player.setPosXY(level.getPlayerSpawnPoint().x, level.getPlayerSpawnPoint().y);
             }
-            if (level.getCactusSpawnPoints() != null) {
-                for (Vector2 spawn : level.getCactusSpawnPoints()) {
-                    Cactus cactus = new Cactus(spawn.x, spawn.y, player, environment.getEntities());
-                    environment.addEntity(cactus);
-                }
-            }
+
+            level.spawnStaticMobs(player, environment.getEntities());
+
         } catch (Exception e) {
             Gdx.app.error("GameScreen", "Erreur loading level", e);
             environment.setLevel(new TestLevel());
@@ -185,9 +180,8 @@ public class GameScreen implements Screen {
         if (mouseInput.isButtonDownNow(0)) {
             Vector2 stageCoords = uiStage.screenToStageCoordinates(new Vector2(mouseInput.GetPosX(), mouseInput.GetPosY()));
             Actor hitActor = uiStage.hit(stageCoords.x, stageCoords.y, true);
-            if (hitActor != null) {
-                return hitActor == actor || hitActor.isDescendantOf(actor);
-            }
+            return hitActor == actor || hitActor.isDescendantOf(actor);
+
         }
         return false;
     }
@@ -195,9 +189,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        // --- 1. GESTION DES INPUTS UI (Menus) ---
+        // Gestion des inputs dans les menus
         if (isPaused) {
-            // -- Inputs Menu Pause --
             if (isActorClicked(resumeBtn)) {
                 togglePause();
             } else if (isActorClicked(quitBtn)) {
@@ -207,31 +200,34 @@ public class GameScreen implements Screen {
                 togglePause();
             }
         } else if (isGameOver) {
-            // -- Inputs Menu Mort --
             if (keyboardInput.isKeyDownNow(Input.Keys.R)) {
                 ((GameEngine) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
                 this.dispose();
                 return;
             }
         } else {
-            // -- Inputs Jeu Normal --
             if (keyboardInput.isKeyDownNow(Input.Keys.ESCAPE)) {
                 togglePause();
             }
         }
 
-        // --- 2. GESTION DE LA LOGIQUE DU MONDE ---
-        // C'est ICI le changement : On met à jour le monde tant qu'on n'est PAS en pause.
-        // Donc même si isGameOver == true, le monde continue de tourner (Dark Souls style).
+        // On fait continuer de tourner le monde, même après la mort du joueur
         if (!isPaused) {
             float effectiveDelta = Math.min(delta, 1 / 16f);
+
+            if (environment.getLevel().getClass().equals(TiledLevel.class)){
+                TiledLevel level = (TiledLevel) environment.getLevel();
+
+                for (SpawnZone zone :  level.getSpawnZones()) {
+                    zone.update(effectiveDelta, player, environment.getEntities());
+                }
+            }
             environment.update(effectiveDelta);
 
             // La caméra suit le cadavre du joueur
-            if (player != null) {
-                gameCamera.position.set(player.getX(), player.getY(), 0);
-                gameCamera.update();
-            }
+            gameCamera.position.set(player.getX(), player.getY(), 0);
+            gameCamera.update();
+
 
             // On vérifie la mort (pour afficher l'UI, mais sans arrêter le monde)
             if (player.getCurrenthealth() <= 0 && !isGameOver) {
@@ -240,7 +236,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        // --- 3. RENDU ---
+        // On applique le rendu
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -252,7 +248,8 @@ public class GameScreen implements Screen {
         uiStage.act(delta);
         uiStage.draw();
 
-        // --- 4. NETTOYAGE INPUTS ---
+        // On update les inputs en dernier
+
         keyboardInput.update();
         mouseInput.update();
     }
@@ -260,9 +257,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gameViewport.update(width, height, true);
-        if (player != null) {
-            gameCamera.position.set(player.getX(), player.getY(), 0);
-        }
+        gameCamera.position.set(player.getX(), player.getY(), 0);
         gameCamera.update();
         uiStage.getViewport().update(width, height, true);
     }
@@ -286,7 +281,7 @@ public class GameScreen implements Screen {
         environment.dispose();
         batch.dispose();
         uiStage.dispose();
-        if (skin != null) skin.dispose();
+        skin.dispose();
     }
 
     public static float getPixelsPerBlocks() {

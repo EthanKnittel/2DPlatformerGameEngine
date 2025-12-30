@@ -119,7 +119,7 @@ public class Player extends Agent {
             }
         }
 
-        // sauts
+        // Sauts
         if (keyboard.isKeyDownNow(Input.Keys.SPACE)) {
             if (getGrounded()) {
                 setVelocityY(jumpSpeed);
@@ -145,7 +145,7 @@ public class Player extends Agent {
             }
         }
 
-        // animations
+        // Animations
         if (getVisualHitActive()){
             setAnimation(hitAnim);
         } else if (getTouchingWall() && !getGrounded() && getVelocity().y<0){
@@ -189,19 +189,19 @@ public class Player extends Agent {
     }
 
     private void shoot() {
-        // 1. Position Souris Écran
+        // Position de la souris
         int screenX = mouse.GetPosX();
         int screenY = mouse.GetPosY();
 
-        // 2. Conversion en Monde
+        // Conversion des positions pour le monde
         Vector3 worldPos = new Vector3(screenX, screenY, 0);
         camera.unproject(worldPos);
 
-        // 3. Départ du centre du joueur
+        // Départ depuis le centre du joueur
         float startX = getX() + getbounds().width / 2f;
         float startY = getY() + getbounds().height / 2f;
 
-        // 4. Création et Ajout
+        // Création projectiles
         FireArrow arrow = new FireArrow(startX, startY, worldPos.x, worldPos.y);
         environment.addEntity(arrow);
     }

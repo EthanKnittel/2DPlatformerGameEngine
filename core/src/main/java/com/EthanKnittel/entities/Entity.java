@@ -17,6 +17,7 @@ public abstract class Entity implements Evolving,Disposable {
     private boolean isAgent = false;
     private boolean isEnemy = false;
     private boolean isPlayer = false;
+    private boolean isProjectile = false;
     private boolean canBeRemove = false;
 
 
@@ -47,6 +48,9 @@ public abstract class Entity implements Evolving,Disposable {
     public boolean getIsPlayer(){
         return isPlayer;
     }
+
+    public boolean getIsProjectile() {return isProjectile;}
+    public void setIsProjectile(boolean isProjectile) {}
 
     @Override
     public abstract void update(float deltaTime);
