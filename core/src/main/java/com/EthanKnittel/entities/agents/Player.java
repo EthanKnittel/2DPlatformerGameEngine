@@ -1,5 +1,6 @@
 package com.EthanKnittel.entities.agents;
 
+import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.inputs.KeyboardInput;
@@ -49,6 +50,7 @@ public class Player extends Agent {
         this.setInvincibilityDuration(1.5f);
         this.setIsPlayer(true);
         this.setVisualHitDuration(0.3f);
+        setJumpSoundName("jumpEffectSound");
     }
 
 
@@ -121,10 +123,12 @@ public class Player extends Agent {
 
         // Sauts
         if (keyboard.isKeyDownNow(Input.Keys.SPACE)) {
+            boolean jumped = false;
             if (getGrounded()) {
                 setVelocityY(jumpSpeed);
                 setGrounded(false);
                 jumpCount = 1;
+                jumped = true;
             } else if (getTouchingWall() && !getGrounded() && jumpCount < jumpCountMax) {
                 setVelocityY(wallJumpYSpeed);
                 if (getWallOnLeft()){
@@ -135,6 +139,7 @@ public class Player extends Agent {
                 wallJumpTimer = wallJumpControl;
                 setGrounded(false);
                 jumpCount++;
+                jumped = true;
             } else if (jumpCount < jumpCountMax){
                 setVelocityY(jumpSpeed);
                 if (jumpCount == 0){
@@ -142,6 +147,10 @@ public class Player extends Agent {
                 } else {
                     jumpCount++;
                 }
+                jumped = true;
+            }
+            if (jumped && getJumpSoundName() != null && AudioManager.audioManager != null){
+                AudioManager.audioManager.playSound(getJumpSoundName());
             }
         }
 

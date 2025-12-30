@@ -1,5 +1,6 @@
 package com.EthanKnittel.game;
 
+import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.entities.agents.foes.Cactus;
 import com.EthanKnittel.entities.agents.foes.Ordi;
 import com.EthanKnittel.respawn.SpawnZone;
@@ -54,6 +55,8 @@ public class GameScreen implements Screen {
     private TextButton resumeBtn;
     private TextButton quitBtn;
 
+    private AudioManager audioManager;
+
     @Override
     public void show() {
         // Initialisation du jeu
@@ -62,6 +65,10 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         float worldWidth = (800f / PixelsPerBlocks) / zoom;
         float worldHeight = (600f / PixelsPerBlocks) / zoom;
+
+        audioManager = new AudioManager();
+        loadAudioAssets();
+        audioManager.playMusic("background_Music", true);
 
         gameCamera = new OrthographicCamera();
         gameViewport = new FitViewport(worldWidth, worldHeight, gameCamera);
@@ -79,6 +86,12 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(keyboardInput);
         inputMultiplexer.addProcessor(mouseInput);
         Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    private void loadAudioAssets() {
+        audioManager.loadMusic("background_Music", "Audio/music/Bonus_Points/Bonus_Points.mp3");
+
+        audioManager.loadSound("jumpEffectSound", "Audio/soundEffect/12_Player_Movement_SFX/30_Jump_03.wav");
     }
 
     private void createPlayerAndLevel() {
@@ -282,6 +295,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         uiStage.dispose();
         skin.dispose();
+        audioManager.dispose();
     }
 
     public static float getPixelsPerBlocks() {

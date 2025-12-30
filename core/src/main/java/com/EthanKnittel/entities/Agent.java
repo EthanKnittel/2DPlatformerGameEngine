@@ -28,6 +28,8 @@ public abstract class Agent extends Entity {
     private AnimationManager animationManager;
     private boolean facingLeft = false;
 
+    private String jumpSoundName = null;
+
 
 
     public Agent(float x, float y, float width, float height, int maxHealth, int damage) {
@@ -45,6 +47,13 @@ public abstract class Agent extends Entity {
         } else {
             animationManager.setAnimation(animation);
         }
+    }
+
+    public void setJumpSoundName(String jumpSoundName) {
+        this.jumpSoundName = jumpSoundName;
+    }
+    public String getJumpSoundName() {
+        return jumpSoundName;
     }
 
     public void setMoveSpeed(float moveSpeed) {
