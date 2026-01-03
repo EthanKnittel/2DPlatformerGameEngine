@@ -1,6 +1,7 @@
 package com.EthanKnittel.game;
 
 import com.EthanKnittel.audio.AudioManager;
+import com.EthanKnittel.graphics.GameHud;
 import com.EthanKnittel.respawn.SpawnZone;
 import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
@@ -43,11 +44,11 @@ public class GameScreen implements Screen {
     private static final float PixelsPerBlocks = 16f;
     private static float zoom = 1.5f;
 
+    private AudioManager audioManager;
     private ScoreManager scoreManager;
     private SaveManager saveManager;
 
-    private Label scoreLabel;
-    private Label timeLabel;
+    private GameHud gameHud;
 
     private Stage uiStage;
     private Skin skin;
@@ -61,7 +62,6 @@ public class GameScreen implements Screen {
     private TextButton resumeBtn;
     private TextButton quitBtn;
 
-    private AudioManager audioManager;
 
     @Override
     public void show() {
@@ -69,55 +69,45 @@ public class GameScreen implements Screen {
         keyboardInput = new KeyboardInput();
         mouseInput = new MouseInput();
         batch = new SpriteBatch();
-        float worldWidth = (800f / PixelsPerBlocks) / zoom;
-        float worldHeight = (600f / PixelsPerBlocks) / zoom;
 
+        // score et save
         scoreManager = new ScoreManager();
         saveManager = new SaveManager();
 
+        // audio
         audioManager = new AudioManager();
         loadAudioAssets();
         audioManager.playMusic("background_Music", true);
 
+        // caméra et viewport
+        float worldWidth = (800f / PixelsPerBlocks) / zoom;
+        float worldHeight = (600f / PixelsPerBlocks) / zoom;
         gameCamera = new OrthographicCamera();
         gameViewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
-        environment = new Environment();
-        createPlayerAndLevel();
 
-        // Initialisation de l'interface
+        // initialisation des menus
         uiStage = new Stage(new ExtendViewport(800, 600), batch);
         createBasicSkin();
-        createHUD();
         createPauseMenu();
         createDeathScreen();
+
+        // le hud en jeu
+        gameHud = new GameHud(batch);
+
+        // environnement
+        environment = new Environment();
+        createPlayerAndLevel();
 
         // Gestion des inputs dans le multiplexeur
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(keyboardInput);
         inputMultiplexer.addProcessor(mouseInput);
         Gdx.input.setInputProcessor(inputMultiplexer);
-
-        System.out.println("High Score actuel : " + saveManager.getHighScore()); // debug
     }
 
     private void loadAudioAssets() {
         audioManager.loadMusic("background_Music", "Audio/music/Bonus_Points/Bonus_Points.mp3");
-
-        audioManager.loadSound("jumpEffectSound", "Audio/soundEffect/12_Player_Movement_SFX/30_Jump_03.wav");
-    }
-
-    private void createHUD(){
-        Table hudTable = new Table();
-        hudTable.top().right(); // on le place en haut à droite
-        hudTable.setFillParent(true);
-
-        scoreLabel = new Label("Score: 0", skin);
-        timeLabel = new Label("Time: 00:00", skin);
-
-        hudTable.add(scoreLabel).pad(10);
-        hudTable.add(timeLabel).pad(10);
-
-        uiStage.addActor(hudTable);
+        audioManager.loadSound("jumpEffectSound", "Audio/soundEffect/12_Player_Movement_SFX/30_Jump_03.wav"); // on peut en rajouter plus
     }
 
     private void createPlayerAndLevel() {
@@ -262,9 +252,9 @@ public class GameScreen implements Screen {
                 }
             }
             environment.update(effectiveDelta);
-
             scoreManager.update(effectiveDelta); // mise à jour du score
-            updateHUD(); // mise à jour de l'interface
+
+            gameHud.update(player); // mise à jour de l'interface
 
             // La caméra suit le cadavre du joueur
             gameCamera.position.set(player.getX(), player.getY(), 0);
@@ -287,6 +277,9 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(gameCamera.combined);
         environment.render(batch, gameCamera);
 
+        gameHud.stage.act(delta);
+        gameHud.stage.draw();
+
         uiStage.act(delta);
         uiStage.draw();
 
@@ -296,18 +289,13 @@ public class GameScreen implements Screen {
         mouseInput.update();
     }
 
-    private void updateHUD() {
-        if (scoreLabel != null && timeLabel != null) {
-            scoreLabel.setText("Score: " + scoreManager.getScore());
-            timeLabel.setText("Time:" + scoreManager.getFormattedTime());
-        }
-    }
     @Override
     public void resize(int width, int height) {
         gameViewport.update(width, height, true);
         gameCamera.position.set(player.getX(), player.getY(), 0);
         gameCamera.update();
         uiStage.getViewport().update(width, height, true);
+        gameHud.resize(width, height);
     }
 
     private void saveStats() {
