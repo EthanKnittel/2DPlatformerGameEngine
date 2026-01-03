@@ -25,7 +25,7 @@ public class FireArrow extends Entity {
     private float visualHeight = 16f / GameScreen.getPixelsPerBlocks();
 
     // Taille de la hitbox
-    private static float hitboxWidth = 32f / GameScreen.getPixelsPerBlocks();
+    private static float hitboxWidth = 16f / GameScreen.getPixelsPerBlocks();
     private static float hitboxHeight = 3f / GameScreen.getPixelsPerBlocks();
 
     public FireArrow(float centerX, float centerY, float targetX, float targetY) {

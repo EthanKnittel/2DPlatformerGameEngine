@@ -14,7 +14,7 @@ public class AudioManager implements Disposable {
 
     private Music currentMusic;
     private float soundVolume = 1.0f;
-    private float musicVolume = 0.2f;
+    private float musicVolume = 0.1f;
 
     public AudioManager() {
         sounds = new Array<>();

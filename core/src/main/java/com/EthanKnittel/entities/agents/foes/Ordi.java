@@ -36,6 +36,7 @@ public class Ordi extends Foe {
         this.setHitStunDuration(0.4f);
         this.setInvincibilityDuration(0.1f);
         this.setVisualHitDuration(0.4f);
+        setScoreValue(150);
 
         loadAnimations();
 

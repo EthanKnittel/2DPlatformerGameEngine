@@ -3,7 +3,7 @@ package com.EthanKnittel.entities.agents;
 import com.EthanKnittel.ai.EnemyStategy;
 import com.EthanKnittel.ai.PatrolStrategy;
 import com.EthanKnittel.entities.Agent;
-import com.EthanKnittel.game.GameScreen;
+import com.EthanKnittel.score.ScoreManager;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Foe extends Agent {
@@ -11,7 +11,10 @@ public abstract class Foe extends Agent {
     private Player target;
     private boolean touchingAlly = false;
 
-    public Foe(float x, float y, float width, float height, int maxHealth, int damage, Player target){
+    private int scoreValue = 100; // valeur par défaut
+    private boolean scoreAwarded = false; // pour éviter de donner plusieurs fois les scores
+
+    public Foe(float x, float y, float width, float height, int maxHealth, int damage, Player target) {
         super(x, y, width, height, maxHealth, damage);
         this.target = target;
         this.setIsEnemy(true);
@@ -42,6 +45,12 @@ public abstract class Foe extends Agent {
                 this.setCanBeRemove(true);
             }
             // Tant qu'il est "touché" (l'animation HIT joue encore), on ne fait rien.
+            if (!scoreAwarded) { // si on a pas encore augmenté le score, on l'augmente
+                if (ScoreManager.instance != null){
+                    ScoreManager.instance.addScore(scoreValue);
+                }
+                scoreAwarded = true;
+            }
             // Le return empêche l'IA de continuer à bouger le cadavre.
             return;
         }
@@ -68,5 +77,12 @@ public abstract class Foe extends Agent {
             return this.strategy.enableSeparation();
         }
         return true;
+    }
+
+    public int getScoreValue() {
+        return scoreValue;
+    }
+    public void setScoreValue(int scoreValue) {
+        this.scoreValue = scoreValue;
     }
 }

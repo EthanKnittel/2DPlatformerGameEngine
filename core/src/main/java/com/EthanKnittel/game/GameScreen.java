@@ -1,9 +1,8 @@
 package com.EthanKnittel.game;
 
 import com.EthanKnittel.audio.AudioManager;
-import com.EthanKnittel.entities.agents.foes.Cactus;
-import com.EthanKnittel.entities.agents.foes.Ordi;
 import com.EthanKnittel.respawn.SpawnZone;
+import com.EthanKnittel.score.ScoreManager;
 import com.EthanKnittel.world.Environment;
 import com.EthanKnittel.world.TestLevel;
 import com.EthanKnittel.inputs.KeyboardInput;
@@ -43,6 +42,11 @@ public class GameScreen implements Screen {
     private static final float PixelsPerBlocks = 16f;
     private static float zoom = 1.5f;
 
+    private ScoreManager scoreManager;
+
+    private Label scoreLabel;
+    private Label timeLabel;
+
     private Stage uiStage;
     private Skin skin;
     private boolean isPaused = false;
@@ -66,6 +70,8 @@ public class GameScreen implements Screen {
         float worldWidth = (800f / PixelsPerBlocks) / zoom;
         float worldHeight = (600f / PixelsPerBlocks) / zoom;
 
+        scoreManager = new ScoreManager();
+
         audioManager = new AudioManager();
         loadAudioAssets();
         audioManager.playMusic("background_Music", true);
@@ -78,6 +84,7 @@ public class GameScreen implements Screen {
         // Initialisation de l'interface
         uiStage = new Stage(new FitViewport(800, 600), batch);
         createBasicSkin();
+        createHUD();
         createPauseMenu();
         createDeathScreen();
 
@@ -92,6 +99,20 @@ public class GameScreen implements Screen {
         audioManager.loadMusic("background_Music", "Audio/music/Bonus_Points/Bonus_Points.mp3");
 
         audioManager.loadSound("jumpEffectSound", "Audio/soundEffect/12_Player_Movement_SFX/30_Jump_03.wav");
+    }
+
+    private void createHUD(){
+        Table hudTable = new Table();
+        hudTable.top().right(); // on le place en haut à droite
+        hudTable.setFillParent(true);
+
+        scoreLabel = new Label("Score: 0", skin);
+        timeLabel = new Label("Time: 00:00", skin);
+
+        hudTable.add(scoreLabel).pad(10);
+        hudTable.add(timeLabel).pad(10);
+
+        uiStage.addActor(hudTable);
     }
 
     private void createPlayerAndLevel() {
@@ -237,10 +258,12 @@ public class GameScreen implements Screen {
             }
             environment.update(effectiveDelta);
 
+            scoreManager.update(effectiveDelta); // mise à jour du score
+            updateHUD(); // mise à jour de l'interface
+
             // La caméra suit le cadavre du joueur
             gameCamera.position.set(player.getX(), player.getY(), 0);
             gameCamera.update();
-
 
             // On vérifie la mort (pour afficher l'UI, mais sans arrêter le monde)
             if (player.getCurrenthealth() <= 0 && !isGameOver) {
@@ -267,6 +290,12 @@ public class GameScreen implements Screen {
         mouseInput.update();
     }
 
+    private void updateHUD() {
+        if (scoreLabel != null && timeLabel != null) {
+            scoreLabel.setText("Score: " + scoreManager.getScore());
+            timeLabel.setText("Time:" + scoreManager.getFormattedTime());
+        }
+    }
     @Override
     public void resize(int width, int height) {
         gameViewport.update(width, height, true);
