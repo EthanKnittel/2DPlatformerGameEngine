@@ -1,6 +1,8 @@
 package com.EthanKnittel.score;
 
-public class ScoreManager {
+import com.EthanKnittel.Evolving;
+
+public class ScoreManager implements Evolving {
     public static ScoreManager instance;
 
     private int score;

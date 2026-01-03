@@ -3,6 +3,7 @@ package com.EthanKnittel.entities.agents;
 import com.EthanKnittel.ai.EnemyStategy;
 import com.EthanKnittel.ai.PatrolStrategy;
 import com.EthanKnittel.entities.Agent;
+import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,6 +11,8 @@ public abstract class Foe extends Agent {
     private EnemyStategy strategy;
     private Player target;
     private boolean touchingAlly = false;
+
+    private String enemyName = "Unknown";
 
     private int scoreValue = 100; // valeur par défaut
     private boolean scoreAwarded = false; // pour éviter de donner plusieurs fois les scores
@@ -49,6 +52,10 @@ public abstract class Foe extends Agent {
                 if (ScoreManager.instance != null){
                     ScoreManager.instance.addScore(scoreValue);
                 }
+
+                if (SaveManager.instance != null) {
+                    SaveManager.instance.addKillCount(enemyName);
+                }
                 scoreAwarded = true;
             }
             // Le return empêche l'IA de continuer à bouger le cadavre.
@@ -84,5 +91,13 @@ public abstract class Foe extends Agent {
     }
     public void setScoreValue(int scoreValue) {
         this.scoreValue = scoreValue;
+    }
+
+    public String getEnemyName() {
+        return enemyName;
+    }
+
+    public void setEnemyName(String enemyName) {
+        this.enemyName = enemyName;
     }
 }

@@ -15,6 +15,7 @@ import com.EthanKnittel.world.Environment;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.EthanKnittel.entities.artifacts.FireArrow;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Player extends Agent {
     private final KeyboardInput keyboard;
@@ -32,15 +33,15 @@ public class Player extends Agent {
     private int jumpCount = 0;
     private int jumpCountMax;
     private Environment environment;
-    private OrthographicCamera camera;
+    private Viewport viewport;
 
     private transient Texture spriteSheet;
 
 
-    public Player(float x, float y,float width, float height, int maxHealth, int damage, int jumpCountMax, KeyboardInput keyboard, MouseInput mouse, Environment env, OrthographicCamera cam) {
+    public Player(float x, float y,float width, float height, int maxHealth, int damage, int jumpCountMax, KeyboardInput keyboard, MouseInput mouse, Environment env, Viewport viewport) {
         super(x,y,width, height, maxHealth, damage);
         this.environment = env;
-        this.camera = cam;
+        this.viewport = viewport;
         this.jumpCountMax = jumpCountMax;
         this.keyboard = keyboard;
         this.mouse = mouse;
@@ -204,7 +205,7 @@ public class Player extends Agent {
 
         // Conversion des positions pour le monde
         Vector3 worldPos = new Vector3(screenX, screenY, 0);
-        camera.unproject(worldPos);
+        viewport.unproject(worldPos);
 
         // Départ depuis le centre du joueur
         float startX = getX() + getbounds().width / 2f;

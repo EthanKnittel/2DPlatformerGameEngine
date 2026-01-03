@@ -1,9 +1,10 @@
 package com.EthanKnittel.graphics;
 
+import com.EthanKnittel.Evolving;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
-public class AnimationManager {
+public class AnimationManager implements Evolving {
     private Animation<TextureRegion> animation;
     private float stateTime;
 

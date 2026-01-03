@@ -2,6 +2,7 @@ package com.EthanKnittel.game;
 
 import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.respawn.SpawnZone;
+import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
 import com.EthanKnittel.world.Environment;
 import com.EthanKnittel.world.TestLevel;
@@ -28,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
@@ -43,6 +44,7 @@ public class GameScreen implements Screen {
     private static float zoom = 1.5f;
 
     private ScoreManager scoreManager;
+    private SaveManager saveManager;
 
     private Label scoreLabel;
     private Label timeLabel;
@@ -71,18 +73,19 @@ public class GameScreen implements Screen {
         float worldHeight = (600f / PixelsPerBlocks) / zoom;
 
         scoreManager = new ScoreManager();
+        saveManager = new SaveManager();
 
         audioManager = new AudioManager();
         loadAudioAssets();
         audioManager.playMusic("background_Music", true);
 
         gameCamera = new OrthographicCamera();
-        gameViewport = new FitViewport(worldWidth, worldHeight, gameCamera);
+        gameViewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
         environment = new Environment();
         createPlayerAndLevel();
 
         // Initialisation de l'interface
-        uiStage = new Stage(new FitViewport(800, 600), batch);
+        uiStage = new Stage(new ExtendViewport(800, 600), batch);
         createBasicSkin();
         createHUD();
         createPauseMenu();
@@ -93,6 +96,8 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(keyboardInput);
         inputMultiplexer.addProcessor(mouseInput);
         Gdx.input.setInputProcessor(inputMultiplexer);
+
+        System.out.println("High Score actuel : " + saveManager.getHighScore()); // debug
     }
 
     private void loadAudioAssets() {
@@ -118,7 +123,7 @@ public class GameScreen implements Screen {
     private void createPlayerAndLevel() {
         float playerWidth = 32f / PixelsPerBlocks;
         float playerHeight = 32f / PixelsPerBlocks;
-        player = new Player(10f, 2f, playerWidth, playerHeight, 100, 20, 2, keyboardInput, mouseInput, environment, gameCamera);
+        player = new Player(10f, 2f, playerWidth, playerHeight, 100, 20, 2, keyboardInput, mouseInput, environment, gameViewport);
 
         try {
             TiledLevel level = new TiledLevel("TiledLevels/4.tmx");
@@ -269,6 +274,7 @@ public class GameScreen implements Screen {
             if (player.getCurrenthealth() <= 0 && !isGameOver) {
                 isGameOver = true;
                 deathTable.setVisible(true);
+                saveStats(); // on sauvegarde les nouveautés
             }
         }
 
@@ -304,11 +310,20 @@ public class GameScreen implements Screen {
         uiStage.getViewport().update(width, height, true);
     }
 
+    private void saveStats() {
+        if (saveManager != null && scoreManager != null) {
+            float time = scoreManager.getTimeSurvived();
+            int score = scoreManager.getScore();
+            saveManager.saveSessionStats(time, score);
+        }
+    }
+
     @Override
     public void pause() {
         if (!isGameOver) {
             isPaused = true;
             pauseTable.setVisible(true);
+            saveStats(); // on sauvegarde pendant la pause, si jamais on a un crash ou autre chose, on garde en mémoire tout ce qu'on peut
         }
     }
 

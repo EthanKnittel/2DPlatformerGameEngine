@@ -38,6 +38,7 @@ public class Cactus extends Foe {
         this.setInvincibilityDuration(0.1f);
         this.setVisualHitDuration(0.4f);
         setScoreValue(50);
+        setEnemyName("Cactus");
 
         loadAnimations();
 
