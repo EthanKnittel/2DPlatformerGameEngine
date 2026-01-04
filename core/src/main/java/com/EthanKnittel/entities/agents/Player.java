@@ -4,7 +4,6 @@ import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.world.Environment;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -132,10 +131,6 @@ public class Player extends Agent {
             jumping = true;
             playsound();
         }
-    }
-
-    @Override
-    public void dispose() {
     }
 
     public void shoot(int screenX, int screenY) {

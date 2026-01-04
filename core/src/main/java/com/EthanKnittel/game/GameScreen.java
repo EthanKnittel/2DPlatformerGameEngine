@@ -3,6 +3,7 @@ package com.EthanKnittel.game;
 import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.graphics.GameHud;
 import com.EthanKnittel.graphics.PlayerView;
+import com.EthanKnittel.graphics.WorldRenderer;
 import com.EthanKnittel.respawn.SpawnZone;
 import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
@@ -36,22 +37,31 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 
+    // input
     private KeyboardInput keyboardInput;
     private MouseInput mouseInput;
+
+    // gestion rendu ou caméra
     private OrthographicCamera gameCamera;
-    private SpriteBatch batch;
-    private Player player;
-    private Environment environment;
     private static final float PixelsPerBlocks = 16f;
     private static float zoom = 1.5f;
+    private SpriteBatch batch;
 
+    // gestion monde
+    private Environment environment;
+    private WorldRenderer worldRenderer;
+
+    // joueur
+    private Player player;
     private PlayerController playerController;
     private PlayerView playerView;
 
+    // Manager
     private AudioManager audioManager;
     private ScoreManager scoreManager;
     private SaveManager saveManager;
 
+    // HUD
     private GameHud gameHud;
 
     private Stage uiStage;
@@ -63,6 +73,7 @@ public class GameScreen implements Screen {
     private Table pauseTable;
     private Table deathTable;
 
+    // bouton (menu pause)
     private TextButton resumeBtn;
     private TextButton quitBtn;
 
@@ -100,6 +111,7 @@ public class GameScreen implements Screen {
 
         // environnement
         environment = new Environment();
+        worldRenderer = new WorldRenderer(environment, batch, gameCamera);
         createPlayerAndLevel();
         playerController = new PlayerController(player, keyboardInput, mouseInput);
         playerView = new PlayerView(player);
@@ -285,7 +297,7 @@ public class GameScreen implements Screen {
         gameViewport.apply();
 
         batch.setProjectionMatrix(gameCamera.combined);
-        environment.render(batch, gameCamera);
+        worldRenderer.render(delta);
 
         batch.begin();
         playerView.render(batch, delta);
@@ -337,12 +349,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        environment.dispose();
         batch.dispose();
         uiStage.dispose();
         skin.dispose();
         audioManager.dispose();
         playerView.dispose();
+        worldRenderer.dispose();
     }
 
     public static float getPixelsPerBlocks() {

@@ -6,33 +6,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.EthanKnittel.entities.Artifact;
 
 public class Wall extends Artifact{
-    private Texture texture;
+    private boolean visible;
 
     public Wall(float x, float y, float width, float height, boolean loadTexture) {
         super(x, y, width, height);
-        if(loadTexture) {
-            try {
-                texture = new Texture(Gdx.files.internal("wall.png"));
-            } catch (Exception e) {
-                Gdx.app.error("Wall", "Error loading texture");
-            }
-        }
+        this.visible = loadTexture;
     }
-    @Override
-    public void update(float delta) {
-        // rien car un mur ne fait rien
+
+    public boolean getVisible() {
+        return visible;
     }
-    @Override
-    public void render(SpriteBatch batch) {
-        if (texture != null) {
-            batch.draw(texture, getX(), getY(), getbounds().width, getbounds().height);
-        }
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     @Override
-    public void dispose() {
-        if (texture != null) {
-            texture.dispose();
-        }
+    public void update(float delta) {
+        // rien car un mur ne fait rien
     }
 }

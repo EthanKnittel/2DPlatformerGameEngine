@@ -3,32 +3,38 @@ package com.EthanKnittel.entities.agents;
 import com.EthanKnittel.ai.EnemyStategy;
 import com.EthanKnittel.ai.PatrolStrategy;
 import com.EthanKnittel.entities.Agent;
+import com.EthanKnittel.entities.Entity;
+import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class Foe extends Agent {
     private EnemyStategy strategy;
     private Player target;
     private boolean touchingAlly = false;
 
+    protected Array<Entity> allEntities;
+
     private String enemyName = "Unknown";
 
     private int scoreValue = 100; // valeur par défaut
     private boolean scoreAwarded = false; // pour éviter de donner plusieurs fois les scores
 
-    public Foe(float x, float y, float width, float height, int maxHealth, int damage, Player target) {
+    public Foe(float x, float y, float width, float height, int maxHealth, int damage, Player target, Array<Entity> allEntities) {
         super(x, y, width, height, maxHealth, damage);
         this.target = target;
         this.setIsEnemy(true);
         this.setStrategy(new PatrolStrategy()); // strategy par défaut
+        this.allEntities = allEntities;
     }
 
     public void setTouchingAlly(boolean isTouching) {
         this.touchingAlly = isTouching;
     }
 
-    // 3. Le Getter (optionnel, si besoin ailleurs)
     public boolean isTouchingAlly() {
         return this.touchingAlly;
     }
@@ -36,6 +42,27 @@ public abstract class Foe extends Agent {
     public void setStrategy(EnemyStategy strategy){
         this.strategy = strategy;
     }
+
+    public boolean hasLineOfSight(Player player){
+        if (allEntities == null){
+            return true;
+        }
+        // Centre de l'ennemi
+        Vector2 start = new Vector2(getX()+ getbounds().width / 2, getY() + getbounds().height / 2);
+        // Centre du joueur
+        Vector2 end = new Vector2(player.getX() + player.getbounds().width / 2, player.getY() + player.getbounds().height / 2);
+
+        for (Entity entity : allEntities){
+            if (entity.getClass().equals(Wall.class)){
+                if (Intersector.intersectSegmentRectangle(start, end, entity.getbounds())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 
     @Override
     public void update(float deltaTime) {

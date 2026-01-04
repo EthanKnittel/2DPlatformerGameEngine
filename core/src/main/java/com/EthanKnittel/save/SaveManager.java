@@ -59,8 +59,8 @@ public class SaveManager {
 
         for (int i=0; i<gameStats.enemyKills.size; i++) {
             EnemyKillStat stat = gameStats.enemyKills.get(i);
-            if (stat.enemyName.equals(enemyName)){
-                stat.killCount = stat.killCount + 1;
+            if (stat.getEnemyName().equals(enemyName)){
+                stat.setKillCount(stat.getKillCount() + 1);
                 found = true;
                 break;
             }
@@ -74,8 +74,8 @@ public class SaveManager {
     public int getKillCount(String enemyName) {
         for (int i=0; i<gameStats.enemyKills.size; i++) {
             EnemyKillStat stat = gameStats.enemyKills.get(i);
-            if (stat.enemyName.equals(enemyName)) {
-                return stat.killCount;
+            if (stat.getEnemyName().equals(enemyName)) {
+                return stat.getKillCount();
             }
         }
         return 0;

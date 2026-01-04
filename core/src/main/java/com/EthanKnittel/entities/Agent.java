@@ -1,10 +1,6 @@
 package com.EthanKnittel.entities;
 
 import com.EthanKnittel.game.GameScreen;
-import com.EthanKnittel.graphics.AnimationManager;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Agent extends Entity {
 
@@ -25,7 +21,6 @@ public abstract class Agent extends Entity {
     private float visualHitTimer = 0f;
     private float visualHitDuration = 0.2f;
 
-    private AnimationManager animationManager;
     private boolean facingLeft = false;
 
     private String jumpSoundName = null;
@@ -39,14 +34,6 @@ public abstract class Agent extends Entity {
         this.damage = damage;
         this.setAffectedByGravity(true);
         this.setIsAgent(true);
-    }
-
-    public void setAnimation(Animation<TextureRegion> animation){
-        if (animationManager == null) {
-            animationManager = new AnimationManager(animation);
-        } else {
-            animationManager.setAnimation(animation);
-        }
     }
 
     public void setJumpSoundName(String jumpSoundName) {
@@ -149,9 +136,6 @@ public abstract class Agent extends Entity {
         if (visualHitTimer > 0) {
             visualHitTimer -= deltaTime;
         }
-        if (animationManager != null) {
-            animationManager.update(deltaTime);
-        }
     }
 
     public boolean isHit() {
@@ -169,16 +153,5 @@ public abstract class Agent extends Entity {
     }
     public void setInvincibilityDuration(float invincibilityDuration) {
         this.invincibilityDuration = invincibilityDuration;
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        if (animationManager != null) {
-            TextureRegion currentframe = animationManager.getFrame();
-            if (currentframe.isFlipX() != facingLeft) {
-                currentframe.flip(true, false); // on retourne le x mais pas le y
-            }
-            batch.draw(currentframe, getX(), getY(), getbounds().width, getbounds().height);
-        }
     }
 }

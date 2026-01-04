@@ -2,12 +2,10 @@ package com.EthanKnittel.entities;
 
 import com.EthanKnittel.Evolving;
 import com.EthanKnittel.game.GameScreen;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
 
-public abstract class Entity implements Evolving,Disposable {
+public abstract class Entity implements Evolving {
     private Vector2 position;
     private Vector2 velocity= new Vector2();
     private Rectangle bounds; // pour la hitbox
@@ -54,11 +52,6 @@ public abstract class Entity implements Evolving,Disposable {
 
     @Override
     public abstract void update(float deltaTime);
-
-    public abstract void render(SpriteBatch batch);
-
-    @Override
-    public abstract void dispose();
 
     public float getX() {
         return  position.x;

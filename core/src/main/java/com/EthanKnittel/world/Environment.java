@@ -9,12 +9,9 @@ import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.game.GameScreen;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class Environment implements Disposable, Evolving {
+public class Environment implements Evolving {
 
     private Level currentlevel;
     private Array<Entity> entities;
@@ -43,7 +40,6 @@ public class Environment implements Disposable, Evolving {
 
         for (int i = entities.size - 1; i >= 0; i--) {
             if (entities.get(i).getCanBeRemove()) {
-                entities.get(i).dispose();
                 entities.removeIndex(i);
             }
         }
@@ -212,30 +208,6 @@ public class Environment implements Disposable, Evolving {
             if (potentialDeltaX != 0 || potentialDeltaY != 0) {
                 entity.setPosXY(entity.getX() + potentialDeltaX, entity.getY() + potentialDeltaY);
             }
-        }
-    }
-
-    public void render(SpriteBatch batch, OrthographicCamera camera) {
-        if (currentlevel != null) {
-            currentlevel.renderBackground(camera);
-        }
-        batch.begin();
-        for (Entity entity : entities) {
-            entity.render(batch);
-        }
-        batch.end();
-        if (currentlevel != null) {
-            currentlevel.renderAbove(camera);
-        }
-    }
-
-    @Override
-    public void dispose() {
-        if (currentlevel != null) {
-            currentlevel.dispose();
-        }
-        for (Entity entity : entities) {
-            entity.dispose();
         }
     }
 
