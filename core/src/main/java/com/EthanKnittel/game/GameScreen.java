@@ -2,6 +2,7 @@ package com.EthanKnittel.game;
 
 import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.graphics.GameHud;
+import com.EthanKnittel.graphics.PlayerView;
 import com.EthanKnittel.respawn.SpawnZone;
 import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
@@ -43,6 +44,9 @@ public class GameScreen implements Screen {
     private Environment environment;
     private static final float PixelsPerBlocks = 16f;
     private static float zoom = 1.5f;
+
+    private PlayerController playerController;
+    private PlayerView playerView;
 
     private AudioManager audioManager;
     private ScoreManager scoreManager;
@@ -97,6 +101,8 @@ public class GameScreen implements Screen {
         // environnement
         environment = new Environment();
         createPlayerAndLevel();
+        playerController = new PlayerController(player, keyboardInput, mouseInput);
+        playerView = new PlayerView(player);
 
         // Gestion des inputs dans le multiplexeur
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -113,7 +119,7 @@ public class GameScreen implements Screen {
     private void createPlayerAndLevel() {
         float playerWidth = 32f / PixelsPerBlocks;
         float playerHeight = 32f / PixelsPerBlocks;
-        player = new Player(10f, 2f, playerWidth, playerHeight, 100, 20, 2, keyboardInput, mouseInput, environment, gameViewport);
+        player = new Player(10f, 2f, playerWidth, playerHeight, 100, 20, 2, environment, gameViewport);
 
         try {
             TiledLevel level = new TiledLevel("TiledLevels/4.tmx");
@@ -244,6 +250,10 @@ public class GameScreen implements Screen {
         if (!isPaused) {
             float effectiveDelta = Math.min(delta, 1 / 16f);
 
+            if (!isGameOver){
+                playerController.update(effectiveDelta);
+            }
+
             if (environment.getLevel().getClass().equals(TiledLevel.class)){
                 TiledLevel level = (TiledLevel) environment.getLevel();
 
@@ -276,6 +286,10 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(gameCamera.combined);
         environment.render(batch, gameCamera);
+
+        batch.begin();
+        playerView.render(batch, delta);
+        batch.end();
 
         gameHud.stage.act(delta);
         gameHud.stage.draw();
@@ -328,6 +342,7 @@ public class GameScreen implements Screen {
         uiStage.dispose();
         skin.dispose();
         audioManager.dispose();
+        playerView.dispose();
     }
 
     public static float getPixelsPerBlocks() {

@@ -2,7 +2,6 @@ package com.EthanKnittel.entities.agents.foes;
 
 import com.EthanKnittel.ai.ChaseStrategy;
 import com.EthanKnittel.ai.PatrolStrategy;
-import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.agents.Foe;
 import com.EthanKnittel.entities.agents.Player;
@@ -86,7 +85,7 @@ public class Cactus extends Foe {
 
     private void updateAI(float deltaTime){
         Player player = this.getTarget();
-        if (player == null || !player.isAlive()) {
+        if (player == null || !player.getAlive()) {
             if (currentState != State.Patrol){
                 currentState=State.Patrol;
                 this.setStrategy(new PatrolStrategy());

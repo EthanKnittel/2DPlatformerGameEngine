@@ -86,7 +86,7 @@ public abstract class Agent extends Entity {
     public int getMaxHealth() {
         return this.maxHealth;
     }
-    public boolean isAlive() {
+    public boolean getAlive() {
         return this.currenthealth > 0;
     }
     public void setGrounded(boolean grounded) {

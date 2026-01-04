@@ -85,7 +85,7 @@ public class Ordi extends Foe {
 
     private void updateAI(float deltaTime){
         Player player = this.getTarget();
-        if (!player.isAlive()) {
+        if (!player.getAlive()) {
             if (currentState != Ordi.State.Patrol){
                 currentState= Ordi.State.Patrol;
                 this.setStrategy(new PatrolStrategy());

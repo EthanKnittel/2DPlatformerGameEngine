@@ -41,7 +41,7 @@ public abstract class Foe extends Agent {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if (!isAlive()) {
+        if (!getAlive()) {
             setInvincibilityDuration(99f); // pour ne pas refaire l'animation de dégats
             // Si l'animation de dégâts est terminée, on supprime l'ennemi
             if (!isHit()) {
