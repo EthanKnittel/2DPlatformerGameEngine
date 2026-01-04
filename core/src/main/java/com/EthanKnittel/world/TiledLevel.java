@@ -6,7 +6,6 @@ import com.EthanKnittel.entities.agents.Player;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.game.GameScreen;
 import com.EthanKnittel.respawn.*;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -22,44 +20,36 @@ import com.badlogic.gdx.utils.Array;
 
 public class TiledLevel extends Level{
     private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
     private final String mapFileName;
 
     private Array<SpawnZone> spawnZones;
+    private Vector2 playerSpawnPoint;
 
     private static final String SpawnLayerName= "SpawnZones";
     private static final String SetupLayerName = "Setup"; // nom du calque de setup
-
-
-    // on stocke les indices des calques, le render dans BatchTiledMapRenderer a besoin de int[].
-    private int[] backgroundLayers;
-    private int[] aboveLayers;
-
-    //On va stocker dans cette variable les coordonnées du spawn du joueur rentré dans Tiled
-    private Vector2 playerSpawnPoint;
-    private Array<Vector2> cactusSpawnPoints;
-    private Array<Vector2> ordiSpawnPoints;
-
 
     public TiledLevel(String filename){
         this.mapFileName = filename;
         this.spawnZones = new Array<>();
     }
 
-    public Array<SpawnZone> getSpawnZones(){return spawnZones;}
-    public Vector2 getPlayerSpawnPoint(){return playerSpawnPoint;}
+    public Array<SpawnZone> getSpawnZones(){
+        return spawnZones;
+    }
+    public Vector2 getPlayerSpawnPoint(){
+        return playerSpawnPoint;
+    }
+    public TiledMap getMap() {
+        return map;
+    }
 
     @Override
     public Array<Entity> load() {
         Array<Entity> generatedEntities = new Array<>();
 
         map = new TmxMapLoader().load(mapFileName);
-        renderer = new OrthogonalTiledMapRenderer(map, 1f / GameScreen.getPixelsPerBlocks());
 
-        Array<Integer> backGroundLayersIndices = new Array<>();
-        Array<Integer> aboveLayersIndices = new Array<>();
-
-        // On gère le spawn du joueur
+        // spawn du joueur
         MapLayer setuplayer = map.getLayers().get(SetupLayerName);
         for (MapObject object : setuplayer.getObjects()) {
             if (object.getProperties().containsKey("playerSpawnPoint")) {
@@ -70,19 +60,12 @@ public class TiledLevel extends Level{
             }
         }
 
+        // zones de spawn des ennemies
         loadSpawnZones();
 
-        // On gère les calques des murs et système de "dessus" ou "arrière plan"
+        // On gère les calques des murs
         for (int i=0; i < map.getLayers().getCount(); i++) {
             MapLayer layer = map.getLayers().get(i);
-
-            // on prend les calques avec "above" true, la valeur par défaut étant false si elle n'existe pas
-            boolean isAbove= layer.getProperties().get("above",false, Boolean.class);
-            if (isAbove) {
-                aboveLayersIndices.add(i);
-            } else {
-                backGroundLayersIndices.add(i);
-            }
 
             // on récupère les calques avec la propriété de collision, la valeur par défaut étant false si elle n'existe pas
             boolean isCollidable = layer.getProperties().get("collidable", false, boolean.class);
@@ -107,7 +90,7 @@ public class TiledLevel extends Level{
                         }
                     }
                 }
-            // C'est un calque de type objet:
+                // C'est un calque de type objet:
             } else {
                 // On parcourt tous les objets du calque
                 for (MapObject object : layer.getObjects()) {
@@ -142,9 +125,6 @@ public class TiledLevel extends Level{
                 }
             }
         }
-
-        backgroundLayers = convertToIntArray(backGroundLayersIndices);
-        aboveLayers = convertToIntArray(aboveLayersIndices);
 
         return generatedEntities;
     }
@@ -234,45 +214,10 @@ public class TiledLevel extends Level{
         }
     }
 
-    private int[] convertToIntArray(Array<Integer> list) {
-        int[] array = new int[list.size];
-        for (int i = 0; i < list.size; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    private void updateCamera(OrthographicCamera camera) {
-        float viewX = camera.position.x - camera.viewportWidth / 2f;
-        float viewY = camera.position.y - camera.viewportHeight / 2f;
-        float padding = 4f;
-        renderer.setView(camera.combined,viewX-padding,viewY-padding, camera.viewportWidth+2*padding,camera.viewportHeight+2*padding);
-    }
-
-    @Override
-    public void renderBackground(OrthographicCamera camera){
-        if (renderer != null && backgroundLayers.length>0) {
-            updateCamera(camera);
-            renderer.render(backgroundLayers);
-        }
-    }
-
-    @Override
-    public void renderAbove(OrthographicCamera camera) {
-        if(renderer != null && aboveLayers.length>0) {
-            updateCamera(camera);
-            renderer.render(aboveLayers);
-        }
-    }
-
     @Override
     public void dispose() {
         if (map != null) {
             map.dispose();
         }
-        if (renderer != null) {
-            renderer.dispose();
-        }
     }
-
 }

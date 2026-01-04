@@ -48,7 +48,9 @@ public abstract class Entity implements Evolving {
     }
 
     public boolean getIsProjectile() {return isProjectile;}
-    public void setIsProjectile(boolean isProjectile) {}
+    public void setIsProjectile(boolean isProjectile) {
+        this.isProjectile = isProjectile;
+    }
 
     @Override
     public abstract void update(float deltaTime);

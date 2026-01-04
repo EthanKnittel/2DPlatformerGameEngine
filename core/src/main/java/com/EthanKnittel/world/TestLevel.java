@@ -39,16 +39,5 @@ public class TestLevel extends Level {
     }
 
     @Override
-    public void dispose() {
-    }
-
-    @Override
-    public void renderBackground(OrthographicCamera camera) {
-    }
-
-    @Override
-    public void renderAbove(OrthographicCamera camera) {
-    }
-
-
+    public void dispose() {}
 }

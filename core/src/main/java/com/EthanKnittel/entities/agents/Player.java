@@ -3,7 +3,7 @@ package com.EthanKnittel.entities.agents;
 import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.game.GameScreen;
-import com.EthanKnittel.world.Environment;
+import com.EthanKnittel.world.systems.Environment;
 import com.badlogic.gdx.math.Vector3;
 import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.badlogic.gdx.utils.viewport.Viewport;

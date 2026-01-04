@@ -1,15 +1,15 @@
 {
-totalPlaytime: 439.4326
-longestSession: 42.583073
+totalPlaytime: 1085.2633
+longestSession: 49.330795
 highScore: 2450
 enemyKills: [
 	{
 		enemyName: Cactus
-		killCount: 186
+		killCount: 281
 	}
 	{
 		enemyName: Ordi
-		killCount: 132
+		killCount: 205
 	}
 ]
 }

@@ -2,12 +2,12 @@ package com.EthanKnittel.game;
 
 import com.EthanKnittel.audio.AudioManager;
 import com.EthanKnittel.graphics.GameHud;
-import com.EthanKnittel.graphics.PlayerView;
+import com.EthanKnittel.graphics.entity.PlayerView;
 import com.EthanKnittel.graphics.WorldRenderer;
 import com.EthanKnittel.respawn.SpawnZone;
 import com.EthanKnittel.save.SaveManager;
 import com.EthanKnittel.score.ScoreManager;
-import com.EthanKnittel.world.Environment;
+import com.EthanKnittel.world.systems.Environment;
 import com.EthanKnittel.world.TestLevel;
 import com.EthanKnittel.inputs.KeyboardInput;
 import com.EthanKnittel.inputs.MouseInput;
@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
 
     // gestion rendu ou caméra
     private OrthographicCamera gameCamera;
-    private static final float PixelsPerBlocks = 16f;
+    private static final float PixelsPerBlocks = 16f; // taille de mes blocs
     private static float zoom = 1.5f;
     private SpriteBatch batch;
 
@@ -111,8 +111,8 @@ public class GameScreen implements Screen {
 
         // environnement
         environment = new Environment();
-        worldRenderer = new WorldRenderer(environment, batch, gameCamera);
         createPlayerAndLevel();
+        worldRenderer = new WorldRenderer(environment, batch, gameCamera);
         playerController = new PlayerController(player, keyboardInput, mouseInput);
         playerView = new PlayerView(player);
 
@@ -298,10 +298,6 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(gameCamera.combined);
         worldRenderer.render(delta);
-
-        batch.begin();
-        playerView.render(batch, delta);
-        batch.end();
 
         gameHud.stage.act(delta);
         gameHud.stage.draw();

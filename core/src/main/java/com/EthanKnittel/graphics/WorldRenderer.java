@@ -1,12 +1,14 @@
 package com.EthanKnittel.graphics;
 
 import com.EthanKnittel.entities.Entity;
+import com.EthanKnittel.entities.agents.Player;
 import com.EthanKnittel.entities.agents.foes.Cactus;
 import com.EthanKnittel.entities.agents.foes.Ordi;
 import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.graphics.entity.*;
-import com.EthanKnittel.world.Environment;
+import com.EthanKnittel.world.TiledLevel;
+import com.EthanKnittel.world.systems.Environment;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
@@ -15,6 +17,7 @@ public class WorldRenderer {
     private Environment environment;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private LevelView levelView;
 
     private Array<EntityView> views;
 
@@ -23,10 +26,15 @@ public class WorldRenderer {
         this.batch = batch;
         this.camera = camera;
         this.views = new Array<>();
+        if (environment.getLevel().getClass().equals(TiledLevel.class)){
+            this.levelView = new LevelView((TiledLevel) environment.getLevel());
+        }
     }
 
     public void render(float delta){
-        environment.getLevel().renderBackground(camera);
+        if (levelView != null) {
+            levelView.renderBackground(camera);
+        }
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -40,6 +48,9 @@ public class WorldRenderer {
                 }
             }
             if (!viewExists) {
+                if (entity instanceof Player){
+                    views.add(new PlayerView((Player) entity));
+                }
                 if (entity instanceof Ordi){
                     views.add(new OrdiView((Ordi) entity));
                 }
@@ -68,7 +79,9 @@ public class WorldRenderer {
 
         batch.end();
 
-        environment.getLevel().renderAbove(camera);
+        if (levelView != null) {
+            levelView.renderAbove(camera);
+        }
     }
 
     public void dispose(){
