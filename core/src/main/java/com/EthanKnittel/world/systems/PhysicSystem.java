@@ -4,7 +4,6 @@ import com.EthanKnittel.entities.Agent;
 import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.agents.Foe;
 import com.EthanKnittel.entities.agents.Player;
-import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.EthanKnittel.entities.artifacts.Projectile;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.game.GameScreen;

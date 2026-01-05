@@ -3,6 +3,7 @@ package com.EthanKnittel.ai;
 import com.EthanKnittel.entities.agents.Player;
 import com.badlogic.gdx.math.Vector2;
 
+
 public class ChaseStrategy implements EnemyStategy {
     private final Vector2 output = new Vector2();
     private float walltimer = 0f;

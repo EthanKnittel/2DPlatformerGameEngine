@@ -1,4 +1,4 @@
-package com.EthanKnittel.graphics;
+package com.EthanKnittel.game;
 
 import com.EthanKnittel.entities.agents.Player;
 import com.EthanKnittel.score.ScoreManager;

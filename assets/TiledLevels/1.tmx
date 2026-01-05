@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="36">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" tilecount="176" columns="16">
   <image source="Tileset.png" width="256" height="176"/>
  </tileset>
@@ -54,6 +54,9 @@
 </data>
  </layer>
  <layer id="1" name="Edge" width="32" height="18">
+  <properties>
+   <property name="collidable" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
 253,253,253,253,253,253,253,253,253,253,253,253,253,240,268,268,268,268,268,268,268,268,268,268,268,268,268,268,268,268,241,253,
 240,268,268,268,268,268,268,268,268,268,268,268,268,269,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,252,253,
@@ -75,4 +78,202 @@
 253,255,238,238,238,238,238,238,238,238,238,238,238,239,0,0,0,237,238,238,238,238,238,238,238,238,238,238,238,238,256,253
 </data>
  </layer>
+ <objectgroup id="4" name="Setup" visible="0">
+  <object id="35" x="112.803" y="269.026">
+   <properties>
+    <property name="playerSpawnPoint" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="SpawnZones">
+  <object id="2" x="-12.1258" y="4.51191" width="258.81" height="271.193"/>
+  <object id="3" x="98.5358" y="70.8821">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="4" x="119.183" y="111.786">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="5" x="92.0978" y="89.0271">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="6" x="43.7918" y="79.2881">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="7" x="64.4388" y="120.192">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="8" x="235.862" y="4.51191" width="258.81" height="271.193"/>
+  <object id="9" x="332.647" y="121.017">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="10" x="353.294" y="161.921">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="11" x="326.209" y="139.162">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="12" x="277.903" y="129.423">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="13" x="298.55" y="170.327">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="14" x="194.796" y="114.075">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="15" x="215.444" y="154.979">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="16" x="188.358" y="132.22">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="17" x="140.052" y="122.481">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="18" x="160.699" y="163.385">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="19" x="393.992" y="29.4731">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="20" x="414.639" y="70.377">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="21" x="387.554" y="47.6181">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="22" x="339.248" y="37.8791">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="23" x="359.895" y="78.783">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="24" x="454.422" y="157.495">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="25" x="475.069" y="198.399">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="26" x="447.984" y="175.64">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="27" x="399.678" y="165.901">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="28" x="420.325" y="206.805">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="29" x="294.618" y="137.8">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="30" x="315.265" y="178.704">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="31" x="288.18" y="155.945">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="32" x="239.874" y="146.206">
+   <properties>
+    <property name="Ordi" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="33" x="260.521" y="187.11">
+   <properties>
+    <property name="Cactus" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>

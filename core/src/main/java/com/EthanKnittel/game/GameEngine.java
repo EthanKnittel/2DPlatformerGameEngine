@@ -8,7 +8,7 @@ public class GameEngine extends Game {
     @Override
     public void create() {
         // On lance le premier écran de jeu
-        setScreen(new GameScreen());
+        setScreen(new MainMenuScreen());
     }
 
     // Le render est géré par la classe Game directement

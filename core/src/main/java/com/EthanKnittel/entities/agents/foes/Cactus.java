@@ -21,7 +21,7 @@ public class Cactus extends Foe {
     private float lostSightCooldown = 2.0f;
 
     public Cactus(float x, float y, Player target, Array<Entity> allentities) {
-        super(x,y,32f/ GameScreen.getPixelsPerBlocks(), 32f/GameScreen.getPixelsPerBlocks(), 50, 1, target, allentities);
+        super(x,y,32f/ GameScreen.getPixelsPerBlocks(), 32f/GameScreen.getPixelsPerBlocks(), 50, 25, target, allentities);
         this.currentState = State.Patrol;
         this.setStrategy(new PatrolStrategy());
         this.setHitStunDuration(0.4f);

@@ -35,6 +35,8 @@ public class WallView implements EntityView{
 
     @Override
     public void dispose() {
-        texture.dispose();
+        if (texture != null ) {
+            texture.dispose();
+        }
     }
 }

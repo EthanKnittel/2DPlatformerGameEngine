@@ -152,5 +152,10 @@ public class Player extends Agent {
             AudioManager.audioManager.playSound(getJumpSoundName());
         }
     }
+
+    @Override
+    public int getMaxHealth() {
+        return super.getMaxHealth();
+    }
 }
 

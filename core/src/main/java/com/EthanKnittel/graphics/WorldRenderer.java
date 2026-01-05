@@ -7,10 +7,14 @@ import com.EthanKnittel.entities.agents.foes.Ordi;
 import com.EthanKnittel.entities.artifacts.FireArrow;
 import com.EthanKnittel.entities.artifacts.Wall;
 import com.EthanKnittel.graphics.entity.*;
+import com.EthanKnittel.world.Level;
 import com.EthanKnittel.world.TiledLevel;
 import com.EthanKnittel.world.systems.Environment;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class WorldRenderer {
@@ -19,6 +23,8 @@ public class WorldRenderer {
     private OrthographicCamera camera;
     private LevelView levelView;
 
+    private ShapeRenderer shapeRenderer;
+
     private Array<EntityView> views;
 
     public WorldRenderer(Environment environment, SpriteBatch batch, OrthographicCamera camera) {
@@ -26,6 +32,7 @@ public class WorldRenderer {
         this.batch = batch;
         this.camera = camera;
         this.views = new Array<>();
+        this.shapeRenderer = new ShapeRenderer();
         if (environment.getLevel().getClass().equals(TiledLevel.class)){
             this.levelView = new LevelView((TiledLevel) environment.getLevel());
         }
@@ -84,10 +91,40 @@ public class WorldRenderer {
         }
     }
 
+    public void setLevel(Level level) {
+        // 1. On nettoie l'ancienne vue pour éviter les fuites de mémoire
+        if (levelView != null) {
+            levelView.dispose();
+            levelView = null;
+        }
+
+        // 2. Si le nouveau niveau est un TiledLevel, on recrée la vue
+        if (level instanceof TiledLevel) {
+            this.levelView = new LevelView((TiledLevel) level);
+        }
+    }
+
+    public void renderFade(float alpha){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, alpha); // noir avec transparence
+
+        float width = camera.viewportWidth * camera.zoom;
+        float height = camera.viewportHeight * camera.zoom;
+        shapeRenderer.rect(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
+
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
     public void dispose(){
         for (EntityView view : views) {
             view.dispose();
         }
         views.clear();
+        shapeRenderer.dispose();
     }
 }

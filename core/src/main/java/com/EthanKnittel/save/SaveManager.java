@@ -85,4 +85,12 @@ public class SaveManager {
         return gameStats.highScore;
     }
 
+    public float getTotalPlaytime() {
+        return gameStats.totalPlaytime;
+    }
+
+    public float getLongestSession() {
+        return gameStats.longestSession;
+    }
+
 }

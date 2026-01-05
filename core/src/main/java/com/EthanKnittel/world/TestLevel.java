@@ -2,7 +2,6 @@ package com.EthanKnittel.world;
 
 import com.EthanKnittel.entities.Entity;
 import com.EthanKnittel.entities.artifacts.Wall;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Array;
 
 public class TestLevel extends Level {

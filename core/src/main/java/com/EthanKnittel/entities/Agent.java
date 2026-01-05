@@ -67,12 +67,14 @@ public abstract class Agent extends Entity {
     public int getCurrenthealth() {
         return this.currenthealth;
     }
+    public void setCurrenthealth(int currenthealth) {this.currenthealth = currenthealth;}
     public int  getDamage() {
         return this.damage;
     }
     public int getMaxHealth() {
         return this.maxHealth;
     }
+    public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
     public boolean getAlive() {
         return this.currenthealth > 0;
     }
@@ -91,6 +93,7 @@ public abstract class Agent extends Entity {
     public float getWallSlideSpeed() {
         return wallSlideSpeed;
     }
+
     public void setWallSlideSpeed(float speed) {
         wallSlideSpeed = speed;
     }
