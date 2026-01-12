@@ -5,30 +5,50 @@ import com.badlogic.gdx.InputProcessor;
 
 import java.util.Arrays;
 
+/**
+ * Gestionnaire d'entrée Souris personnalisé.
+ * <p>
+ * Cette classe intercepte et stocke l'état de la souris (Boutons, Position, Molette)
+ * pour permettre une utilisation facile dans la boucle de jeu.
+ * </p>
+ * <p>
+ * Elle gère :
+ * <ul>
+ * <li><b>Les Clics :</b> État maintenu vs Clic instantané.</li>
+ * <li><b>La Position :</b> Coordonnées écran (pixels) actuelles et précédentes.</li>
+ * <li><b>Le Scroll :</b> Défilement de la molette.</li>
+ * </ul>
+ * </p>
+ */
 public class MouseInput implements InputProcessor {
-    // LibGDX gère 5 touches: 0=gauche / 1=droite / 2=milieu / 3=arrière et 4=avant
+
+    // LibGDX gère 5 boutons : 0=Gauche, 1=Droite, 2=Milieu, 3=Arrière, 4=Avant
     private static final int Max_Buttons = 5;
 
-    // liste pour gérer les touches enfoncées
-    private final boolean[] buttonsDown = new boolean[Max_Buttons]; // enfoncé
-    private final boolean[] buttonsDownNow = new boolean[Max_Buttons]; // vient d'être enfoncé lors de la frame
+    // --- ÉTATS DES BOUTONS ---
+    /** Vrai tant que le bouton est maintenu enfoncé. */
+    private final boolean[] buttonsDown = new boolean[Max_Buttons];
 
-    // Position actuelle de la souris
+    /** Vrai uniquement lors de la frame où le bouton a été cliqué. */
+    private final boolean[] buttonsDownNow = new boolean[Max_Buttons];
+
+    // --- POSITION CURSEUR (Pixels Écran) ---
+    // Origine (0,0) = Coin Haut-Gauche de la fenêtre.
     private int PosX;
     private int PosY;
 
-    //Position de la souris à la frame précédente
+    // Position à la frame précédente (Utile pour calculer la vitesse de la souris ou le "Drag")
     private int LastPosX;
     private int LastPosY;
 
-    // état du scroll
+    // --- MOLETTE (Scroll) ---
     private int scrollX;
     private int scrollY;
 
     public MouseInput() {
-        Arrays.fill(buttonsDown, false);    // On initialise les listes
-        Arrays.fill(buttonsDownNow, false); // avec des boutons relâchés
-        // on initialise toutes les variables à 0
+        Arrays.fill(buttonsDown, false);    // Initialisation : aucun bouton pressé
+        Arrays.fill(buttonsDownNow, false);
+
         this.PosX = 0;
         this.PosY = 0;
         this.LastPosX = 0;
@@ -37,42 +57,61 @@ public class MouseInput implements InputProcessor {
         this.scrollY = 0;
     }
 
+    /**
+     * Méthode de mise à jour à appeler à chaque frame (fin de boucle).
+     * <p>
+     * Elle nettoie les événements uniques (Clics instantanés, Scroll) pour qu'ils ne soient
+     * traités qu'une seule fois.
+     * </p>
+     */
     public void update(){
-        Arrays.fill(buttonsDownNow, false); // nouvelle frame tout à false
-        // on remet le scroll à 0
-        this.scrollX=0;
-        this.scrollY=0;
+        Arrays.fill(buttonsDownNow, false); // Reset des clics "Just Pressed"
+
+        // Reset du scroll (la molette ne "reste" pas roulée, c'est un événement ponctuel)
+        this.scrollX = 0;
+        this.scrollY = 0;
     }
 
+    /**
+     * Met à jour la position interne de la souris.
+     * Appelé automatiquement par les événements LibGDX (touchDown, touchDragged, etc.).
+     */
     private void updatePosition(int screenX, int screenY){
-        // On enregistre l'ancienne position
+        // On sauvegarde l'ancienne position avant de la remplacer
         this.LastPosX = this.PosX;
         this.LastPosY = this.PosY;
-        // on met en place la nouvelle position
+
+        // Mise à jour actuelle
         this.PosX = screenX;
         this.PosY = screenY;
     }
 
-    // méthode qui gère les clics de souris
+    // --- API PUBLIQUE (Pour le jeu) ---
+
+    /**
+     * Vérifie si un bouton est maintenu enfoncé (ex: Tir automatique).
+     * @param button Code du bouton (0=Gauche, 1=Droite...).
+     */
     public boolean isButtonDown(int button){
-        // simple prévention pour éviter un crash si une touche
-        // ne fait pas partie de celles prises en compte
         if (button < 0 || button >= Max_Buttons) {
             return false;
         }
         return buttonsDown[button];
     }
 
+    /**
+     * Vérifie si un bouton vient d'être cliqué (ex: Tir coup par coup, Sélection menu).
+     * @param button Code du bouton.
+     */
     public boolean isButtonDownNow(int button){
         if (button < 0 || button >= Max_Buttons) {
             return false;
         }
         return buttonsDownNow[button];
-
     }
 
-    // pour si on veut faire un ctrl + clic par exemple
-    // on n'utilise pas notre KeyboardInput car on les veut indépendant
+    // Combinaisons Clavier + Souris (ex: Ctrl + Clic)
+    // Utile pour des commandes avancées (glisser un objet par exemple).
     public boolean isButtonDownMods(int button, int modKey){
         return isButtonDown(button) && Gdx.input.isKeyPressed(modKey);
     }
@@ -81,31 +120,21 @@ public class MouseInput implements InputProcessor {
         return isButtonDownNow(button) && Gdx.input.isKeyPressed(modKey);
     }
 
-    // Getter
-    public int GetPosX(){
-        return this.PosX;
-    }
-    public int GetPosY(){
-        return this.PosY;
-    }
-    public int GetLastPosX(){
-        return this.LastPosX;
-    }
-    public int GetLastPosY(){
-        return this.LastPosY;
-    }
-    public int GetScrollX(){
-        return this.scrollX;
-    }
-    public int GetScrollY(){
-        return this.scrollY;
-    }
+    // Getters de Position
+    public int GetPosX() { return this.PosX; }
+    public int GetPosY() { return this.PosY; }
+    public int GetLastPosX() { return this.LastPosX; }
+    public int GetLastPosY() { return this.LastPosY; }
 
-    // Override des méthode de l'interface
+    // Getters de Scroll
+    public int GetScrollX() { return this.scrollX; }
+    public int GetScrollY() { return this.scrollY; }
+
+    // --- CALLBACKS LIBGDX ---
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        updatePosition(screenX, screenY);
+        updatePosition(screenX, screenY); // On met à jour la pos même au clic
         if (button >= 0 && button < Max_Buttons) {
             buttonsDown[button] = true;
             buttonsDownNow[button] = true;
@@ -117,14 +146,9 @@ public class MouseInput implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         updatePosition(screenX, screenY);
         if (button >= 0 && button < Max_Buttons) {
-            buttonsDown[button] = false;
+            buttonsDown[button] = false; // Relâché
         }
         return true;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
     }
 
     @Override
@@ -141,25 +165,14 @@ public class MouseInput implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        this.scrollX = (int) amountX; // on force les paramètres à être des int
+        this.scrollX = (int) amountX;
         this.scrollY = (int) amountY;
         return true;
     }
 
-    // méthodes lié au clavier non pris en compte ici
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
+    // Méthodes clavier ignorées (gérées par KeyboardInput)
+    @Override public boolean touchCancelled(int screenX, int screenY, int pointer, int button) { return false; }
+    @Override public boolean keyDown(int keycode) { return false; }
+    @Override public boolean keyUp(int keycode) { return false; }
+    @Override public boolean keyTyped(char character) { return false; }
 }

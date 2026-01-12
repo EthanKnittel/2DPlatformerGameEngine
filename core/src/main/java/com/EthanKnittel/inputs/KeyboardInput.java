@@ -4,38 +4,71 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import java.util.Arrays;
 
-
+/**
+ * Gestionnaire d'entrée Clavier personnalisé.
+ * <p>
+ * Cette classe implémente {@link InputProcessor} pour intercepter les événements clavier de LibGDX.
+ * Elle stocke l'état de chaque touche dans des tableaux de booléens pour permettre
+ * une interrogation facile (Polling) depuis la boucle de jeu.
+ * </p>
+ * <p>
+ * <b>Pourquoi ne pas utiliser Gdx.input.isKeyPressed() directement ?</b><br>
+ * LibGDX gère très bien l'état "maintenu" (isKeyPressed), mais gère moins facilement l'événement "Just Pressed"
+ * (appuyé à cette frame précise). Cette classe résout ce problème avec {@code keysDownNow}.
+ * </p>
+ */
 public class KeyboardInput implements InputProcessor {
 
-    // Nombre de touches max géré par LibGDX
+    // Nombre de touches max géré par LibGDX (256 codes touches)
     private static final int MAX_KEYS = Input.Keys.MAX_KEYCODE + 1;
-    // Liste de booléen pour savoir si chaque touche est enfoncé
+
+    /** État persistant : True tant que la touche est maintenue enfoncée. */
     private final boolean[] keysDown = new boolean[MAX_KEYS];
-    // Liste de booléen pour savoir si chaque touche vient d'être enfoncé lors de la frame
+
+    /** État instantané : True seulement pendant la frame où la touche a été enfoncée. */
     private final boolean[] keysDownNow = new boolean[MAX_KEYS];
 
     public KeyboardInput() {
-        // Tout est initialisé comme étant "non enfoncé"
+        // Tout est initialisé comme étant "non enfoncé" au démarrage
         Arrays.fill(keysDown, false);
         Arrays.fill(keysDownNow, false);
     }
 
+    /**
+     * Méthode à appeler à la fin de chaque frame (dans le GameScreen).
+     * <p>
+     * Elle réinitialise le tableau "Just Pressed" (keysDownNow) pour s'assurer
+     * qu'un appui touche n'est valide que pour une seule frame.
+     * </p>
+     */
     public void update() {
-        // On réinitialise le tableau "keysDownNow" à chaque frames
         Arrays.fill(keysDownNow, false);
     }
 
-    // méthode vérifiant si une touche est enfoncé
+    // --- MÉTHODES D'INTERROGATION (API) ---
+
+    /**
+     * Vérifie si une touche est physiquement maintenue enfoncée.
+     * <p>Utilisation : Déplacements continus (marcher, courir).</p>
+     *
+     * @param keyCode Le code de la touche (ex: {@code Input.Keys.SPACE}).
+     * @return true si la touche est enfoncé.
+     */
     public boolean isKeyDown(int keyCode) {
-        // simple prévention pour éviter un crash si une touche
-        // ne fait pas partie de celles prises en compte
+        // Sécurité : on évite un crash ArrayOutOfBounds si le code est invalide
         if (keyCode < 0 || keyCode >= MAX_KEYS) {
             return false;
         }
         return keysDown[keyCode];
     }
 
-    // méthode vérifiant si une touche est enfoncé lors de la frame en cours
+    /**
+     * Vérifie si une touche vient d'être enfoncée à cette frame précise.
+     * <p>Utilisation : Actions uniques (Sauter, Tirer, Ouvrir menu).</p>
+     *
+     * @param keyCode Le code de la touche.
+     * @return true seulement lors de la première frame de l'appui.
+     */
     public boolean isKeyDownNow(int keyCode) {
         if (keyCode < 0 || keyCode >= MAX_KEYS) {
             return false;
@@ -43,31 +76,34 @@ public class KeyboardInput implements InputProcessor {
         return keysDownNow[keyCode];
     }
 
-    //méthode pour gérer quand on presse une touche
+    // --- CALLBACKS LIBGDX (InputProcessor) ---
+    // Ces méthodes sont appelées automatiquement par LibGDX quand un événement OS survient.
+
     @Override
     public boolean keyDown(int keyCode) {
         if (keyCode >= 0 && keyCode < MAX_KEYS) {
-            keysDown[keyCode] = true;
-            keysDownNow[keyCode] = true; // pour cette frame
+            keysDown[keyCode] = true;      // On note qu'elle est maintenue
+            keysDownNow[keyCode] = true;   // On note qu'elle vient d'être pressée (sera reset au prochain update)
         }
-        return true;
+        return true; // true signifie "J'ai traité l'événement, ne le passez pas aux autres processeurs"
     }
 
-    //méthode pour gérer quand on relâche une touche
     @Override
     public boolean keyUp(int keyCode) {
         if (keyCode >= 0 && keyCode < MAX_KEYS) {
-            keysDown[keyCode] = false; // on a "définitivement" relâché la touche
+            keysDown[keyCode] = false; // On a "définitivement" relâché la touche
+            // Note : on ne touche pas à keysDownNow ici, car l'événement "Pressed" a déjà été consommé.
         }
         return true;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        return false; // on ne le gèrera pas
+        return false; // On ne gère pas la saisie de texte (ex: taper son nom)
     }
 
-    //les méthodes suivantes sont lié à la souris, non géré ici
+    // --- SOURIS (Non géré ici, voir MouseInput) ---
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         return false;

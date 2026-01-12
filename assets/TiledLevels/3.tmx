@@ -194,6 +194,7 @@
   <object id="17" x="199.159" y="148.835">
    <properties>
     <property name="Cactus" type="bool" value="true"/>
+    <property name="Chase" type="bool" value="true"/>
     <property name="Ordi" type="bool" value="true"/>
    </properties>
    <point/>

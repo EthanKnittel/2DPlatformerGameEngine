@@ -1,0 +1,105 @@
+Date : 2026-01-11 19:29:30
+Directory : c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src
+Total : 56 files,  3259 codes, 1280 comments, 938 blanks, all 5477 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Java     |         56 |      3,259 |      1,280 |        938 |      5,477 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                      |         56 |      3,259 |      1,280 |        938 |      5,477 |
+| main                                                                                                                                   |         56 |      3,259 |      1,280 |        938 |      5,477 |
+| main\java                                                                                                                              |         56 |      3,259 |      1,280 |        938 |      5,477 |
+| main\java\com                                                                                                                          |         56 |      3,259 |      1,280 |        938 |      5,477 |
+| main\java\com\EthanKnittel                                                                                                             |         56 |      3,259 |      1,280 |        938 |      5,477 |
+| main\java\com\EthanKnittel (Files)                                                                                                     |          1 |          4 |         30 |          3 |         37 |
+| main\java\com\EthanKnittel\ai                                                                                                          |          5 |        214 |        231 |         75 |        520 |
+| main\java\com\EthanKnittel\audio                                                                                                       |          3 |        129 |         88 |         41 |        258 |
+| main\java\com\EthanKnittel\entities                                                                                                    |         10 |        600 |        427 |        198 |      1,225 |
+| main\java\com\EthanKnittel\entities (Files)                                                                                            |          3 |        241 |        127 |         71 |        439 |
+| main\java\com\EthanKnittel\entities\agents                                                                                             |          4 |        276 |        197 |         90 |        563 |
+| main\java\com\EthanKnittel\entities\agents (Files)                                                                                     |          2 |        240 |        144 |         72 |        456 |
+| main\java\com\EthanKnittel\entities\agents\foes                                                                                        |          2 |         36 |         53 |         18 |        107 |
+| main\java\com\EthanKnittel\entities\artifacts                                                                                          |          3 |         83 |        103 |         37 |        223 |
+| main\java\com\EthanKnittel\game                                                                                                        |          6 |        659 |         85 |        193 |        937 |
+| main\java\com\EthanKnittel\graphics                                                                                                    |         13 |        662 |         30 |        146 |        838 |
+| main\java\com\EthanKnittel\graphics (Files)                                                                                            |          3 |        209 |         11 |         45 |        265 |
+| main\java\com\EthanKnittel\graphics\entity                                                                                             |          7 |        275 |          0 |         52 |        327 |
+| main\java\com\EthanKnittel\graphics\ui                                                                                                 |          3 |        178 |         19 |         49 |        246 |
+| main\java\com\EthanKnittel\inputs                                                                                                      |          2 |        168 |         96 |         52 |        316 |
+| main\java\com\EthanKnittel\respawn                                                                                                     |          7 |        192 |        239 |         71 |        502 |
+| main\java\com\EthanKnittel\save                                                                                                        |          3 |        106 |          0 |         32 |        138 |
+| main\java\com\EthanKnittel\score                                                                                                       |          1 |         63 |          0 |         18 |         81 |
+| main\java\com\EthanKnittel\world                                                                                                       |          5 |        462 |         54 |        109 |        625 |
+| main\java\com\EthanKnittel\world (Files)                                                                                               |          3 |        251 |         41 |         61 |        353 |
+| main\java\com\EthanKnittel\world\systems                                                                                               |          2 |        211 |         13 |         48 |        272 |
++----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                               | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\Evolving.java                           | Java     |          4 |         30 |          3 |         37 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\ai\BrainStrategy.java                   | Java     |         41 |         47 |         13 |        101 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\ai\ChaseStrategy.java                   | Java     |         80 |         48 |         30 |        158 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\ai\EnemyStrategy.java                   | Java     |          9 |         48 |          7 |         64 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\ai\PatrolStrategy.java                  | Java     |         52 |         40 |         14 |        106 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\ai\StrategyRegistry.java                | Java     |         32 |         48 |         11 |         91 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\audio\AudioManager.java                 | Java     |         97 |         58 |         25 |        180 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\audio\MusicEntry.java                   | Java     |         16 |         15 |          7 |         38 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\audio\SoundEntry.java                   | Java     |         16 |         15 |          9 |         40 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\Agent.java                     | Java     |        139 |         50 |         38 |        227 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\Artifact.java                  | Java     |          7 |         31 |          4 |         42 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\Entity.java                    | Java     |         95 |         46 |         29 |        170 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\agents\Foe.java                | Java     |        104 |         64 |         35 |        203 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\agents\Player.java             | Java     |        136 |         80 |         37 |        253 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\agents\foes\Cactus.java        | Java     |         18 |         24 |          7 |         49 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\agents\foes\Ordi.java          | Java     |         18 |         29 |         11 |         58 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\artifacts\FireArrow.java       | Java     |         17 |         30 |         11 |         58 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\artifacts\Projectile.java      | Java     |         48 |         39 |         18 |        105 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\entities\artifacts\Wall.java            | Java     |         18 |         34 |          8 |         60 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\GameEngine.java                    | Java     |         12 |          2 |          7 |         21 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\GameHud.java                       | Java     |         85 |          2 |         29 |        116 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\GameScreen.java                    | Java     |        296 |         63 |         81 |        440 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\LevelManager.java                  | Java     |         36 |          0 |         10 |         46 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\MainMenuScreen.java                | Java     |        191 |         18 |         56 |        265 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\game\PlayerController.java              | Java     |         39 |          0 |         10 |         49 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\AnimationManager.java          | Java     |         30 |          1 |         10 |         41 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\LevelView.java                 | Java     |         70 |          7 |         16 |         93 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\WorldRenderer.java             | Java     |        109 |          3 |         19 |        131 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\AnimatedEntityView.java | Java     |         58 |          0 |         12 |         70 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\CactusView.java         | Java     |         40 |          0 |          6 |         46 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\EntityView.java         | Java     |          8 |          0 |          3 |         11 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\FireArrowView.java      | Java     |         38 |          0 |         11 |         49 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\OrdiView.java           | Java     |         40 |          0 |          6 |         46 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\PlayerView.java         | Java     |         55 |          0 |          7 |         62 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\entity\WallView.java           | Java     |         36 |          0 |          7 |         43 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\ui\GameMenus.java              | Java     |        119 |         11 |         32 |        162 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\ui\MenuCallback.java           | Java     |          7 |          0 |          2 |          9 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\graphics\ui\SkinFactory.java            | Java     |         52 |          8 |         15 |         75 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\inputs\KeyboardInput.java               | Java     |         71 |         44 |         22 |        137 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\inputs\MouseInput.java                  | Java     |         97 |         52 |         30 |        179 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\CactusFactory.java              | Java     |         12 |         16 |          4 |         32 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\EnemyAssociation.java           | Java     |         15 |         16 |          7 |         38 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\EnemyFactory.java               | Java     |          8 |         19 |          4 |         31 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\EnemyRegistry.java              | Java     |         29 |         46 |         10 |         85 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\OrdiFactory.java                | Java     |         12 |         16 |          4 |         32 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\SpawnPoint.java                 | Java     |         44 |         64 |         15 |        123 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\respawn\SpawnZone.java                  | Java     |         72 |         62 |         27 |        161 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\save\EnemyKillStat.java                 | Java     |         22 |          0 |          5 |         27 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\save\GameStats.java                     | Java     |          9 |          0 |          5 |         14 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\save\SaveManager.java                   | Java     |         75 |          0 |         22 |         97 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\score\ScoreManager.java                 | Java     |         63 |          0 |         18 |         81 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\world\Level.java                        | Java     |          7 |          0 |          3 |         10 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\world\TestLevel.java                    | Java     |         28 |          5 |         10 |         43 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\world\TiledLevel.java                   | Java     |        216 |         36 |         48 |        300 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\world\systems\Environment.java          | Java     |         46 |          1 |         14 |         61 |
+| c:\Users\User\Documents\projet java\2DPlatformerGameEngine\core\src\main\java\com\EthanKnittel\world\systems\PhysicSystem.java         | Java     |        165 |         12 |         34 |        211 |
+| Total                                                                                                                                  |          |      3,259 |      1,280 |        938 |      5,477 |
++----------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
