@@ -139,6 +139,9 @@ public class ScoreManager implements Evolving {
     public int getScore() {
         return score;
     }
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     /**
      * Récupère le temps de survie exact en secondes.

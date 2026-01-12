@@ -280,6 +280,7 @@ public class GameScreen implements Screen, MenuCallback {
         // Appelé quand on clique sur "Recommencer" (Mort)
         // On recharge simplement un nouveau GameScreen
         ((GameEngine) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+        scoreManager.setScore(0);
     }
 
     /**
@@ -299,6 +300,7 @@ public class GameScreen implements Screen, MenuCallback {
     public void onGoToMainMenu() {
         // On sauvegarde avant de quitter par sécurité
         saveStats();
+        scoreManager.setScore(0); // on remet le score à 0
         // On change l'écran vers le Menu Principal
         ((GameEngine) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
     }
