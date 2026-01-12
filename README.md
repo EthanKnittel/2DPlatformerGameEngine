@@ -1,33 +1,27 @@
 # 2DGameEngine
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Ceci est un projet créé pour le cours de Programmation et conception orientée objet de l'université Côte d'Azur, 
+utilisant la bibliothèque [libGDX](https://libgdx.com/), dont leur outil pour débuter rapidement ([gdx-liftoff](https://github.com/libgdx/gdx-liftoff)) 
+a été utilisé.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+Ce projet a été généré avec un modèle incluant un lanceur d'application simple et une extension `ApplicationAdapter`.
 
-## Platforms
+L'objectif de ce projet est d'être un moteur prévu pour des platformer/action en 2D.
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## Programme
+
+- `core`: Le module principal dans lequel se situe tout le code que j'ai écrit
+- `assets`: Le fichier dans lequel est situé tous les sprites, cartes et sauvegardes.
+
+## Compilation/Execution
+
+Pour lancer l'application, vous avez à votre disposition le fichier "run.bat" si vous êtes sur Windows, ou "run.sh" 
+si vous êtes sur Linux ou macOS.
+Si vous souhaitez seulement compiler, puisque ce projet utilise Gradle il vous suffit, dans un terminal à la racine du projet, 
+d'exécuter la commande "gradlew.bat build" si vous êtes sur Windows et "./gradlew build" si vous êtes sur Linux / macOS.
 
 ## Gradle
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+Ce projet utilise [Gradle](https://gradle.org/), simplifiant les étapes de compilation comme cité précédemment.
+Ce dernier est présent depuis l'utilisation de l'outil de lancement rapide 
+mis à disposition par libGDX: [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
